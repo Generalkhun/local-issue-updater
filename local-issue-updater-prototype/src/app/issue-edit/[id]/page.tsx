@@ -1,4 +1,5 @@
 'use client'
+import IssueForm from '@/component/IssueForm'
 import React from 'react'
 interface Props {
     params: {
@@ -6,7 +7,9 @@ interface Props {
     }
 }
 const Page = ({params}: Props) => {
-    return <p>issue edit id: {params.id}</p>
+    return <div>
+        <IssueForm/>
+    </div>
 }
 
 export default Page

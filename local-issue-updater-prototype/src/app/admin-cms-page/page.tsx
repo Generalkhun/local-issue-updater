@@ -1,4 +1,5 @@
-import IssueListContainer from '@/component/IssueListContainer/IssueListContainer'
+
+import IssueListContainer from '@/component/IssueListContainer'
 import React from 'react'
 
 type Props = {}

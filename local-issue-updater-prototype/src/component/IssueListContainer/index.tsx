@@ -1,6 +1,6 @@
 import { IssueItem } from '@/types'
 import React from 'react'
-import IssueList from '../IssueList/IssueList'
+import IssueList from '../IssueList'
 
 type Props = {}
 

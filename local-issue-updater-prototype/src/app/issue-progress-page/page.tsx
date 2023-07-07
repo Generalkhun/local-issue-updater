@@ -2,8 +2,11 @@ import React from 'react'
 
 type Props = {}
 
-export const IssueProgressPage = (props: Props) => {
+const IssueProgressPage = (props: Props) => {
   return (
-    <div>IssueProgressPage</div>
+    <div>
+    </div>
   )
 }
+
+export default IssueProgressPage

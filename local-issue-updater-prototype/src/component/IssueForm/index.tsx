@@ -1,72 +1,146 @@
-import React from 'react'
+                    
+import React, { useEffect, useState } from 'react'
 
 type Props = {
     id: string;
     onSaveForm: () => void
+    onFormDataChange: (updatedFormData: Record<any, any>) => void;
 }
+const IssueForm = ({ id, onSaveForm, onFormDataChange }: Props) => {
+    //todo: use id to prefill id the form is editing form
+    const [status, setStatus] = useState("tobeCheck");
+    const [issueDetail, setIssueDetail] = useState("");
+    const [type, setType] = useState("electric");
+    const [area, setArea] = useState("a");
+    const [reporterName, setReporterName] = useState("");
+    const [reporterPhoneNumber, setReporterPhoneNumber] = useState("");
+    const [responsibleTeam, setResponsibleTeam] = useState("w");
+    const [ps, setPs] = useState("");
+    const [severity, setSeverity] = useState("critical");
 
-const IssueForm = ({id,onSaveForm}: Props) => {
+    // form data update
+    useEffect(() => {
+        if (!status) {
+            return;
+        }
+        onFormDataChange({ status })
+    }, [status, onFormDataChange])
+    useEffect(() => {
+        if (!issueDetail) {
+            return;
+        }
+        onFormDataChange({ issueDetail })
+    }, [issueDetail, onFormDataChange])
+    useEffect(() => {
+        if(!type) {
+            return;
+        }
+        onFormDataChange({ type })
+    }, [type, onFormDataChange])
+    useEffect(() => {
+        if(!area) {
+            return;
+        }
+        onFormDataChange({ area })
+    }, [area, onFormDataChange])
+    useEffect(() => {
+        if(!reporterName) {
+            return;
+        }
+        onFormDataChange({ reporterName })
+    }, [reporterName, onFormDataChange])
+
+    useEffect(() => {
+        if(!reporterPhoneNumber) {
+            return;
+        }
+        onFormDataChange({ reporterPhoneNumber })
+    }, [reporterPhoneNumber, onFormDataChange])
+
+    useEffect(() => {
+        if(!responsibleTeam) {
+            return;
+        }
+        onFormDataChange({ responsibleTeam })
+    }, [responsibleTeam, onFormDataChange])
+
+    useEffect(() => {
+        if(!ps) {
+            return;
+        }
+        onFormDataChange({ ps })
+    }, [ps, onFormDataChange])
+
+    useEffect(() => {
+        if(!severity) {
+            return;
+        }
+        onFormDataChange({ severity })
+    }, [severity, onFormDataChange])
     return (
         <div>
             <div>
                 <label htmlFor='status'>สถานะปัญหา</label>
-                <select id='status' placeholder=''>
-                    <option value="volvo">รอดำเนินการตรวจสอบ</option>
-                    <option value="saab">กำลังตรวจสอบ</option>
-                    <option value="fiat">กำลังดำเนินการแก้ไข</option>
-                    <option value="audi">แก้ไขเรียบร้อย</option>
+                <select onChange={(e) => setStatus(e.target.value)} id='status' placeholder=''>
+                    <option value="tobeCheck">รอดำเนินการตรวจสอบ</option>
+                    <option value="checking">กำลังตรวจสอบ</option>
+                    <option value="fixing">กำลังดำเนินการแก้ไข</option>
+                    <option value="done">แก้ไขเรียบร้อย</option>
                 </select>
             </div>
             <div>
                 <label htmlFor='detail'>รายละเอียด</label>
-                <input type='text' id='detail' placeholder='' />
+                <input onChange={(e) => setIssueDetail(e.target.value)} type='text' id='detail' placeholder='' />
             </div>
             <div>
                 <label htmlFor='type'>ประเภทปัญหา</label>
-                <select id='type' placeholder=''>
-                    <option value="volvo">ไฟฟ้ารั่ว</option>
-                    <option value="saab">น้ำท่วมขัง</option>
-                    <option value="fiat">ของแตกเสียหาย</option>
-                    <option value="audi">ปัญหาคนจร</option>
+                <select onChange={(e) => setType(e.target.value)} id='type' placeholder=''>
+                    <option value="electric">ไฟฟ้ารั่ว</option>
+                    <option value="flood">น้ำท่วมขัง</option>
+                    <option value="brokenStuffs">ของแตกเสียหาย</option>
+                    <option value="vagabondIssue">ปัญหาคนจร</option>
                 </select>
             </div>
             <div>
                 <label htmlFor='area'>แขวงที่เกิดปัญหา</label>
-                <select id='area' placeholder=''>
-                    <option value="volvo">แขวงa</option>
-                    <option value="saab">แขวงb</option>
-                    <option value="fiat">แขวงc</option>
-                    <option value="audi">แขวงd</option>
+                <select onChange={(e) => setArea(e.target.value)} id='area' placeholder=''>
+                    <option value="a">แขวงa</option>
+                    <option value="b">แขวงb</option>
+                    <option value="c">แขวงc</option>
+                    <option value="d">แขวงd</option>
                 </select>
             </div>
             <div>
                 <label htmlFor='reporterName'>ชื่อผู้รายงาน(ถ้ามี)</label>
-                <input type='text' id='reporterName' placeholder='' />
+                <input onChange={(e) => setReporterName(e.target.value)} type='text' id='reporterName' placeholder='' />
             </div>
             <div>
                 <label htmlFor='reporterPhoneNum'>เบอร์โทรศัพท์ผู้รายงาน(ถ้ามี)</label>
-                <input type='text' id='reporterPhoneNum' placeholder='' />
+                <input onChange={(e) => setReporterPhoneNumber(e.target.value)} type='text' id='reporterPhoneNum' placeholder='' />
             </div>
             <div>
                 <label htmlFor='area'>ทีมงานที่รับผิดชอบ</label>
-                <select id='area' placeholder=''>
-                    <option value="volvo">ทีมA</option>
-                    <option value="saab">ทีมB</option>
-                    <option value="fiat">ทีมC</option>
-                    <option value="audi">ทีมD</option>
+                <select onChange={(e) => setResponsibleTeam(e.target.value)} id='area' placeholder=''>
+                    <option value="w">ทีมw</option>
+                    <option value="x">ทีมx</option>
+                    <option value="y">ทีมy</option>
+                    <option value="z">ทีมz</option>
                 </select>
             </div>
             <div>
                 <label htmlFor='ps'>หมายเหตุ</label>
-                <input type='text' id='ps' placeholder='' />
+                <input onChange={(e) => setPs(e.target.value)} type='text' id='ps' placeholder='' />
             </div>
             <div>
                 <label htmlFor='severity'>ความเร่งด่วน</label>
-                <select id='severity' placeholder=''>
-                    <option value="volvo">วิกฤติ</option>
-                    <option value="saab">ด่วน</option>
-                    <option value="fiat">ต้องรีบแก้ไข</option>
-                    <option value="audi">ปัญหาทั่วไป</option>
+                <select onChange={(e) => {
+                    console.log("🚀 ~ file: index.tsx:1 ~ IssueForm ~ e.target.value:", e.target.value)
+                    setSeverity(e.target.value)
+                }} id='severity' placeholder=''>
+                    <option value="critical">วิกฤติ</option>
+                    <option value="hurry">ด่วนมาก</option>
+                    <option value="quiteMajor">แอบด่วน</option>
+                    <option value="ordinary">ปัญหาทั่วไป</option>
                 </select>
             </div>
             <h2>ภาพประกอบ</h2>

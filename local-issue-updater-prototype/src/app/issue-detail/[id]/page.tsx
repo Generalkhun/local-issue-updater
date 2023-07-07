@@ -14,7 +14,7 @@ const Page = ({ params }: Props) => {
             display: 'flex',
             gap: '100px'
         }}>
-            รหัสปัญหา: {id}
+            <h1>รายละเอียด รหัสปัญหา: {id}</h1>
             <button onClick={() => router.push(`/issue-edit/${id}`)}>แก้ไข</button>
         </div>
         <div>------------</div>

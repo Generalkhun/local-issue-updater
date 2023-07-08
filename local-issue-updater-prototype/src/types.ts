@@ -1,14 +1,8 @@
-export type IssueType = 
-    "footpath"|
-    "breakingwall"|
-    "electricalline"|
-    "flood"
-
 export interface IssueItem {
     id: string;
     status: string;
     issueDetail: string;
-    type: IssueType;
+    type: string;
     area: string;
     reporterName: string;
     reporterPhoneNumber: string;

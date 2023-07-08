@@ -11,10 +11,10 @@ type Props = {
 }
 const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormData }: Props) => {
     //todo: use id to prefill id the form is editing form
-    const [status, setStatus] = useState(isEditMode ? prefillFormData?.status :"tobeCheck");
+    const [status, setStatus] = useState(isEditMode ? prefillFormData?.status :"recieved");
     const [issueDetail, setIssueDetail] = useState("");
-    const [type, setType] = useState(isEditMode ? prefillFormData?.type :"electric");
-    const [area, setArea] = useState(isEditMode ? prefillFormData?.area :"a");
+    const [type, setType] = useState(isEditMode ? prefillFormData?.type :"1");
+    const [area, setArea] = useState(isEditMode ? prefillFormData?.area :"jomtong");
     const [reporterName, setReporterName] = useState("");
     const [reporterPhoneNumber, setReporterPhoneNumber] = useState("");
     const [ps, setPs] = useState("");
@@ -94,10 +94,11 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormDa
             <div>
                 <label htmlFor='status'>สถานะปัญหา</label>
                 <select value={status} onChange={(e) => setStatus(e.target.value)} id='status' placeholder=''>
-                    <option value="tobeCheck">รอดำเนินการตรวจสอบ</option>
-                    <option value="checking">กำลังตรวจสอบ</option>
-                    <option value="fixing">กำลังดำเนินการแก้ไข</option>
-                    <option value="done">แก้ไขเรียบร้อย</option>
+                    <option value="รับเรื่องปัญหา">รับเรื่องปัญหา</option>
+                    <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                    <option value="ดำเนินการเรียบร้อย">ดำเนินการเรียบร้อย</option>
+                    <option value="นอกเขตพื้นที่">นอกเขตพื้นที่</option>
+                    <option value="ที่ส่วนบุคคล">ที่ส่วนบุคคล</option>
                 </select>
             </div>
             <div>
@@ -107,19 +108,44 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormDa
             <div>
                 <label htmlFor='type'>ประเภทปัญหา</label>
                 <select value={type} onChange={(e) => setType(e.target.value)} id='type' placeholder=''>
-                    <option value="electric">ไฟฟ้ารั่ว</option>
-                    <option value="flood">น้ำท่วมขัง</option>
-                    <option value="brokenStuffs">ของแตกเสียหาย</option>
-                    <option value="vagabondIssue">ปัญหาคนจร</option>
+                    <option value="ถนน">ถนน</option>
+                    <option value="ทางเท้า">ทางเท้า</option>
+                    <option value="แสงสว่าง">แสงสว่าง</option>
+                    <option value="ความปลอดภัย">ความปลอดภัย</option>
+                    <option value="ความสะอาด">ความสะอาด</option>
+
+                    <option value="น้ำท่วม">น้ำท่วม</option>
+                    <option value="กีดขวาง">กีดขวาง</option>
+                    <option value="ท่อระบายน้ำ">ท่อระบายน้ำ</option>
+                    <option value="จราจร">จราจร</option>
+
+                    <option value="สะพาน">สะพาน</option>
+                    <option value="สายไฟ">สายไฟ</option>
+                    <option value="เสียงรบกวน">เสียงรบกวน</option>
+                    <option value="คลอง">คลอง</option>
+                    
+                    <option value="ต้นไม้">ต้นไม้</option>
+                    <option value="ป้าย">ป้าย</option>
+                    <option value="สัตว์จรจัด">สัตว์จรจัด</option>
+                    <option value="PM2.5">PM2.5</option>
+
+                    <option value="คนจรจัด">คนจรจัด</option>
+                    <option value="การเดินทาง">การเดินทาง</option>
+                    <option value="ห้องน้ำ">ห้องน้ำ</option>
+                    <option value="ป้ายจราจร">ป้ายจราจร</option>
+
+                    <option value="อื่นๆ">อื่นๆ</option>
+                    <option value="ข้อเสนอแนะ/นโยบาย">ข้อเสนอแนะ/นโยบาย</option>
+                    <option value="สวนสาธารณะ">สวนสาธารณะ</option>
                 </select>
             </div>
             <div>
                 <label htmlFor='area'>แขวงที่เกิดปัญหา</label>
                 <select value={area} onChange={(e) => setArea(e.target.value)} id='area' placeholder=''>
-                    <option value="a">แขวงa</option>
-                    <option value="b">แขวงb</option>
-                    <option value="c">แขวงc</option>
-                    <option value="d">แขวงd</option>
+                    <option value="จอมทอง">จอมทอง</option>
+                    <option value="บางค้อ">บางค้อ</option>
+                    <option value="บางมด">บางมด</option>
+                    <option value="ท่าข้าม">ท่าข้าม</option>
                 </select>
             </div>
             <div>
@@ -139,10 +165,10 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormDa
                 <select value={severity} onChange={(e) => {
                     setSeverity(e.target.value)
                 }} id='severity' placeholder=''>
-                    <option value="critical">วิกฤติ</option>
-                    <option value="hurry">ด่วนมาก</option>
-                    <option value="quiteMajor">แอบด่วน</option>
-                    <option value="ordinary">ปัญหาทั่วไป</option>
+                    <option value="1">วิกฤติ</option>
+                    <option value="2">ด่วน</option>
+                    <option value="3">ปานกลาง</option>
+                    <option value="4">รอได้</option>
                 </select>
             </div>
             <h2>ภาพประกอบ</h2>

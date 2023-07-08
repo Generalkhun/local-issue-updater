@@ -17,12 +17,14 @@ const IssueList = ({ issues }: Props) => {
     }
     const borderColorMapper = (severity: string) => {
         switch (severity) {
-            case 'critical':
+            case 'วิกฤติ':
                 return 'red'
-            case 'hurry':
+            case 'ด่วน':
                 return 'orange'
-            case 'canwait':
+            case 'ปานกลาง':
                 return 'yellow'
+            case 'รอได้':
+                return 'grey'
             default:
                 return 'grey'
         }

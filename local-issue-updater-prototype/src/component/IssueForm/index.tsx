@@ -165,10 +165,10 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormDa
                 <select value={severity} onChange={(e) => {
                     setSeverity(e.target.value)
                 }} id='severity' placeholder=''>
-                    <option value="1">วิกฤติ</option>
-                    <option value="2">ด่วน</option>
-                    <option value="3">ปานกลาง</option>
-                    <option value="4">รอได้</option>
+                    <option value="วิกฤติ">วิกฤติ</option>
+                    <option value="ด่วน">ด่วน</option>
+                    <option value="ปานกลาง">ปานกลาง</option>
+                    <option value="รอได้">รอได้</option>
                 </select>
             </div>
             <h2>ภาพประกอบ</h2>

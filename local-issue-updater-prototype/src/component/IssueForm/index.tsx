@@ -1,22 +1,41 @@
-                    
+
+import { IssueItem } from '@/types';
 import React, { useEffect, useState } from 'react'
 
 type Props = {
     id: string;
     onSaveForm: () => void
     onFormDataChange: (updatedFormData: Record<any, any>) => void;
+    isEditMode?: boolean;
+    prefillFormData?: IssueItem;
 }
-const IssueForm = ({ id, onSaveForm, onFormDataChange }: Props) => {
+const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormData }: Props) => {
     //todo: use id to prefill id the form is editing form
-    const [status, setStatus] = useState("tobeCheck");
+    const [status, setStatus] = useState(isEditMode ? prefillFormData?.status :"tobeCheck");
     const [issueDetail, setIssueDetail] = useState("");
-    const [type, setType] = useState("electric");
-    const [area, setArea] = useState("a");
+    const [type, setType] = useState(isEditMode ? prefillFormData?.type :"electric");
+    const [area, setArea] = useState(isEditMode ? prefillFormData?.area :"a");
     const [reporterName, setReporterName] = useState("");
     const [reporterPhoneNumber, setReporterPhoneNumber] = useState("");
-    const [responsibleTeam, setResponsibleTeam] = useState("w");
     const [ps, setPs] = useState("");
-    const [severity, setSeverity] = useState("critical");
+    const [severity, setSeverity] = useState(isEditMode ? prefillFormData?.severity : "critical");
+
+    // prefill everything if it is edit mode
+    useEffect(() => {
+        if (!isEditMode || !prefillFormData) {
+            return;
+        }
+        const thisIssue = prefillFormData
+        setStatus(thisIssue.status)
+        setIssueDetail(thisIssue.issueDetail)
+        setType(thisIssue.type)
+        setArea(thisIssue.area)
+        setReporterName(thisIssue.reporterName)
+        setReporterPhoneNumber(thisIssue.reporterPhoneNumber)
+        setPs(thisIssue.ps)
+        setSeverity(thisIssue.severity)
+    }, [prefillFormData, isEditMode])
+
 
     // form data update
     useEffect(() => {
@@ -32,47 +51,40 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange }: Props) => {
         onFormDataChange({ issueDetail })
     }, [issueDetail, onFormDataChange])
     useEffect(() => {
-        if(!type) {
+        if (!type) {
             return;
         }
         onFormDataChange({ type })
     }, [type, onFormDataChange])
     useEffect(() => {
-        if(!area) {
+        if (!area) {
             return;
         }
         onFormDataChange({ area })
     }, [area, onFormDataChange])
     useEffect(() => {
-        if(!reporterName) {
+        if (!reporterName) {
             return;
         }
         onFormDataChange({ reporterName })
     }, [reporterName, onFormDataChange])
 
     useEffect(() => {
-        if(!reporterPhoneNumber) {
+        if (!reporterPhoneNumber) {
             return;
         }
         onFormDataChange({ reporterPhoneNumber })
     }, [reporterPhoneNumber, onFormDataChange])
 
     useEffect(() => {
-        if(!responsibleTeam) {
-            return;
-        }
-        onFormDataChange({ responsibleTeam })
-    }, [responsibleTeam, onFormDataChange])
-
-    useEffect(() => {
-        if(!ps) {
+        if (!ps) {
             return;
         }
         onFormDataChange({ ps })
     }, [ps, onFormDataChange])
 
     useEffect(() => {
-        if(!severity) {
+        if (!severity) {
             return;
         }
         onFormDataChange({ severity })
@@ -81,7 +93,7 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange }: Props) => {
         <div>
             <div>
                 <label htmlFor='status'>สถานะปัญหา</label>
-                <select onChange={(e) => setStatus(e.target.value)} id='status' placeholder=''>
+                <select value={status} onChange={(e) => setStatus(e.target.value)} id='status' placeholder=''>
                     <option value="tobeCheck">รอดำเนินการตรวจสอบ</option>
                     <option value="checking">กำลังตรวจสอบ</option>
                     <option value="fixing">กำลังดำเนินการแก้ไข</option>
@@ -90,11 +102,11 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange }: Props) => {
             </div>
             <div>
                 <label htmlFor='detail'>รายละเอียด</label>
-                <input onChange={(e) => setIssueDetail(e.target.value)} type='text' id='detail' placeholder='' />
+                <input value={issueDetail} onChange={(e) => setIssueDetail(e.target.value)} type='text' id='detail' placeholder='' />
             </div>
             <div>
                 <label htmlFor='type'>ประเภทปัญหา</label>
-                <select onChange={(e) => setType(e.target.value)} id='type' placeholder=''>
+                <select value={type} onChange={(e) => setType(e.target.value)} id='type' placeholder=''>
                     <option value="electric">ไฟฟ้ารั่ว</option>
                     <option value="flood">น้ำท่วมขัง</option>
                     <option value="brokenStuffs">ของแตกเสียหาย</option>
@@ -103,7 +115,7 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange }: Props) => {
             </div>
             <div>
                 <label htmlFor='area'>แขวงที่เกิดปัญหา</label>
-                <select onChange={(e) => setArea(e.target.value)} id='area' placeholder=''>
+                <select value={area} onChange={(e) => setArea(e.target.value)} id='area' placeholder=''>
                     <option value="a">แขวงa</option>
                     <option value="b">แขวงb</option>
                     <option value="c">แขวงc</option>
@@ -112,29 +124,19 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange }: Props) => {
             </div>
             <div>
                 <label htmlFor='reporterName'>ชื่อผู้รายงาน(ถ้ามี)</label>
-                <input onChange={(e) => setReporterName(e.target.value)} type='text' id='reporterName' placeholder='' />
+                <input value={reporterName} onChange={(e) => setReporterName(e.target.value)} type='text' id='reporterName' placeholder='' />
             </div>
             <div>
                 <label htmlFor='reporterPhoneNum'>เบอร์โทรศัพท์ผู้รายงาน(ถ้ามี)</label>
-                <input onChange={(e) => setReporterPhoneNumber(e.target.value)} type='text' id='reporterPhoneNum' placeholder='' />
-            </div>
-            <div>
-                <label htmlFor='area'>ทีมงานที่รับผิดชอบ</label>
-                <select onChange={(e) => setResponsibleTeam(e.target.value)} id='area' placeholder=''>
-                    <option value="w">ทีมw</option>
-                    <option value="x">ทีมx</option>
-                    <option value="y">ทีมy</option>
-                    <option value="z">ทีมz</option>
-                </select>
+                <input value={reporterPhoneNumber} onChange={(e) => setReporterPhoneNumber(e.target.value)} type='text' id='reporterPhoneNum' placeholder='' />
             </div>
             <div>
                 <label htmlFor='ps'>หมายเหตุ</label>
-                <input onChange={(e) => setPs(e.target.value)} type='text' id='ps' placeholder='' />
+                <input value={ps} onChange={(e) => setPs(e.target.value)} type='text' id='ps' placeholder='' />
             </div>
             <div>
                 <label htmlFor='severity'>ความเร่งด่วน</label>
-                <select onChange={(e) => {
-                    console.log("🚀 ~ file: index.tsx:1 ~ IssueForm ~ e.target.value:", e.target.value)
+                <select value={severity} onChange={(e) => {
                     setSeverity(e.target.value)
                 }} id='severity' placeholder=''>
                     <option value="critical">วิกฤติ</option>

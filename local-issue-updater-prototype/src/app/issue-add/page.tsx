@@ -1,7 +1,7 @@
 'use client'
 import IssueForm from '@/component/IssueForm'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { guidGenerator } from '../utils/uiHelper'
+import { getlocalISOTime, guidGenerator } from '../utils/uiHelper'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
@@ -35,8 +35,7 @@ const Page = ({ params }: Props) => {
   }
 
   const onSaveAddForm = () => {
-    var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-    var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1)
+    const localISOTime = getlocalISOTime()
     const completedSaveForm = {
       id: generatedIssueId,
       ...formData,

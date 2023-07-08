@@ -146,10 +146,18 @@ const transformToArrayTobeAddedToGGSheet = (formData: Object, expectedLength: nu
     }
     return values(formData)
 }
-export const saveFormToGGSheet = async (formData: any) => {
+
+/**
+ * 
+ * @param formData 
+ * @param row by default, we will add it to the latest row. If passed, 
+ * will over write the specified row with this issue. Mainly needed only when edit (delete then add updated row)
+ * @returns 
+ */
+export const saveFormToGGSheet = async (formData: any, row?: number) => {
 
     // transform the to arrays format 
-    const tobeAddedDataArray = transformToArrayTobeAddedToGGSheet(formData, 12)
+    const tobeAddedDataArray = transformToArrayTobeAddedToGGSheet(formData, 11)
 
     // connect to the sheet 
     const sheets = await connectGoogleSheetsApi()
@@ -157,9 +165,9 @@ export const saveFormToGGSheet = async (formData: any) => {
     // request 
     const request = {
         spreadsheetId: "1Pv6xHZSKq_QXNGrI3XZWSPPuXUAL9f-YRX-B7MQrTKA",
-        range: SHEET_RANGE_ADD,
+        range: row ? `test-issues!A${row}:L${row}`:SHEET_RANGE_ADD,
         valueInputOption: 'USER_ENTERED',
-        insertDataOption: 'INSERT_ROWS',
+        insertDataOption: row ? 'OVERWRITE' : 'INSERT_ROWS',
         requestBody: {
             "majorDimension": "ROWS",
             "values": [tobeAddedDataArray],
@@ -175,7 +183,7 @@ export const getIssuesDataFromGGSheet = async () => {
     //query and return response
     const response = await sheets.spreadsheets.values.get({
         spreadsheetId: "1Pv6xHZSKq_QXNGrI3XZWSPPuXUAL9f-YRX-B7MQrTKA",
-        range: 'test-issues!A1:L'
+        range: 'test-issues!A1:K'
     })
     return formatGoogleSheetDataResponse(get(response, 'data.values'))
 }
@@ -198,4 +206,21 @@ export const formatGoogleSheetDataResponse = (sheetDataArray: any) => {
         return namedRecord
     })
     return objectifyedRecords
+}
+
+
+// Delete data (used for updating purpose, just delete -> add updated one)
+export const deleteGoogleSheetIssueData = async (rowNumber:number) => {
+    const sheets = await connectGoogleSheetsApi()
+    const request = {
+        // The ID of the spreadsheet to update.
+        spreadsheetId: "1Pv6xHZSKq_QXNGrI3XZWSPPuXUAL9f-YRX-B7MQrTKA",
+    
+        // The A1 notation of the values to clear.
+        range: `A${rowNumber}:L${rowNumber}`,  // TODO: Update placeholder value.
+        resource: {
+          // TODO: Add desired properties to the request body.
+        },
+      };
+    return sheets.spreadsheets.values.clear(request);
 }

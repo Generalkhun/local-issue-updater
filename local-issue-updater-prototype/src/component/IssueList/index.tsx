@@ -8,7 +8,6 @@ type Props = {
 }
 
 const IssueList = ({ issues }: Props) => {
-    console.log("🚀 ~ file: index.tsx:11 ~ IssueList ~ issues:", issues)
     const router = useRouter()
     const onClickShare = () => {
         console.log('share')
@@ -60,8 +59,9 @@ const IssueList = ({ issues }: Props) => {
                                         display: 'flex',
                                         flexDirection: 'column',
                                     }}>
-                                        <button onClick={onClickShare}>แชร์</button>
+                                        <button onClick={onClickShare}>คัดลอกลิ้ง</button>
                                         <button onClick={() => onClickDetail(issue.id)}>รายละเอียด</button>
+                                        <button onClick={() => router.push(`/issue-edit/${issue.id}`)}>แก้ไข</button>
                                     </div>
                                 </div>
                             </div>

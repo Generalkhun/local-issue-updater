@@ -49,9 +49,9 @@ const IssueList = ({ issues }: Props) => {
                                     <div style={{
                                         borderColor: 'grey',
                                         borderStyle: "solid",
-                                    }}>{issue.issueContent}</div>
+                                    }}>{issue.issueDetail}</div>
                                     <div>ประเภท: {issue.type}</div>
-                                    <div>สถานะ: {issue.issueStatus}</div>
+                                    <div>สถานะ: {issue.status}</div>
                                     <div>ความเร่งด่วน: {issue.severity}</div>
                                 </div>
                                 <div>

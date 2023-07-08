@@ -15,7 +15,7 @@ const Page = ({ params }: Props) => {
   const [generatedIssueId, setGeneratedIssueId] = useState<string>('')
   const [formData, setFormData] = useState<any>({})
   useEffect(() => {
-    if(generatedIssueId) {
+    if (generatedIssueId) {
       return;
     }
     const newRandomId = guidGenerator();
@@ -27,6 +27,10 @@ const Page = ({ params }: Props) => {
       ...updatedFormData,
     }))
   }, [setFormData])
+
+  const onClickCancel = () => {
+    router.push('/admin-cms-page')
+  }
 
   const onSaveAddForm = () => {
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
@@ -47,7 +51,10 @@ const Page = ({ params }: Props) => {
       });
   }
   return <div>
-    <h1>เพิ่มปัญหาใหม่ (id: {generatedIssueId})</h1>
+    <div>
+      <button onClick={onClickCancel}>ยกเลิก</button>
+      <h1>เพิ่มปัญหาใหม่ (id: {generatedIssueId})</h1>
+    </div>
     <IssueForm onFormDataChange={onFormDataChange} onSaveForm={onSaveAddForm} id={id} />
   </div>
 }

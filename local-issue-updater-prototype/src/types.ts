@@ -6,13 +6,15 @@ export type IssueType =
 
 export interface IssueItem {
     id: string;
-    issueStatus: string;
-    issueContent: string;
+    status: string;
+    issueDetail: string;
     type: IssueType;
+    area: string;
     reporterName: string;
-    reporterPhoneNum: string;
-    workingSquad: string;
+    reporterPhoneNumber: string;
+    responsibleTeam: string;
     ps: string;
     severity: string;
     datetimeReport: string;
+    latestDatetimeUpdate: string;
 }

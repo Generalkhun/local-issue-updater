@@ -1,30 +1,13 @@
-import { IssueItem } from '@/types'
-import React from 'react'
+import React, { useContext } from 'react'
 import IssueList from '../IssueList'
+import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
 
-type Props = {}
-
-const IssueListContainer = (props: Props) => {
-    // get from api
-    const issues: IssueItem[] = [
-        {
-            id: '1',
-            area: 'a',
-            status: 'inProgress',
-            issueDetail: 'สายไฟขาดที่ถนน หน้าตลาดเช้า',
-            type: 'electricalline',
-            reporterName: 'สมชัย แสวงการงานทำบ้างเห้อะ',
-            reporterPhoneNumber: '000009999999',
-            responsibleTeam: 'ทีมพื้นที่',
-            ps: 'คนนี้รีบร้อนมาก เพราะบ้านไฟดับ',
-            severity: 'critical' ,
-            datetimeReport: '10/10/1995',
-            latestDatetimeUpdate: '13/10/1995',
-        }
-    ]
+const IssueListContainer = () => {
+  const {issuesData} = useContext(GoogleSheetDataContext)
+  // get from api
   return (
     <div>
-        <IssueList issues={issues}/>
+       {!!issuesData.length && <IssueList issues={issuesData}/>}
     </div>
   )
 }

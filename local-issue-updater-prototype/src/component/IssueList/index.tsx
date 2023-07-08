@@ -8,6 +8,7 @@ type Props = {
 }
 
 const IssueList = ({ issues }: Props) => {
+    console.log("🚀 ~ file: index.tsx:11 ~ IssueList ~ issues:", issues)
     const router = useRouter()
     const onClickShare = () => {
         console.log('share')

@@ -79,12 +79,41 @@
 //     const response = await sheets.spreadsheets.values.append(request)
 //     return response
 // }
+// export const getIssuesDataFromGGSheet = async () => {
+//     const sheets = await connectGoogleSheetsApi()
+//     //query and return response
+//     const response = await sheets.spreadsheets.values.get({
+//         spreadsheetId: process.env.SHEET_ID,
+//         range: 'test-issues!A1:L'
+//     })
+//     return formatGoogleSheetDataResponse(get(response, 'data.values'))
+// }
+
+// export const formatGoogleSheetDataResponse = (sheetDataArray: any) => {
+
+//     // extract fields 
+//     const fieldsname = sheetDataArray[0]
+
+//     // loop through the rest and inject their field name, returned as object
+
+//     const objectifyedRecords = map(slice(sheetDataArray, 1), (record: string[]) => {
+//         let namedRecord = {}
+//         for (let i = 0; i < fieldsname.length; i++) {
+//             namedRecord = {
+//                 ...namedRecord,
+//                 [fieldsname[i]]: replace(record[i],/\\|"/g, '')
+//             }
+//         }
+//         return namedRecord
+//     })
+//     return objectifyedRecords
+// }
 
 
 // local env
 import { google } from "googleapis";
 import { GoogleAuthOptions } from "google-auth-library";
-import { values } from "lodash";
+import { values, map, slice ,replace,get } from "lodash";
 
 const SHEET_RANGE_ADD = 'test-issues!A1:L' // used to append a record
 
@@ -139,4 +168,34 @@ export const saveFormToGGSheet = async (formData: any) => {
     // append data on a google sheet row
     const response = await sheets.spreadsheets.values.append(request)
     return response
+}
+
+export const getIssuesDataFromGGSheet = async () => {
+    const sheets = await connectGoogleSheetsApi()
+    //query and return response
+    const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: "1Pv6xHZSKq_QXNGrI3XZWSPPuXUAL9f-YRX-B7MQrTKA",
+        range: 'test-issues!A1:L'
+    })
+    return formatGoogleSheetDataResponse(get(response, 'data.values'))
+}
+
+export const formatGoogleSheetDataResponse = (sheetDataArray: any) => {
+
+    // extract fields 
+    const fieldsname = sheetDataArray[0]
+
+    // loop through the rest and inject their field name, returned as object
+
+    const objectifyedRecords = map(slice(sheetDataArray, 1), (record: string[]) => {
+        let namedRecord = {}
+        for (let i = 0; i < fieldsname.length; i++) {
+            namedRecord = {
+                ...namedRecord,
+                [fieldsname[i]]: replace(record[i],/\\|"/g, '')
+            }
+        }
+        return namedRecord
+    })
+    return objectifyedRecords
 }

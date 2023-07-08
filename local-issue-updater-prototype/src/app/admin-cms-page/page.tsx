@@ -1,8 +1,10 @@
 
 'use client'
 import IssueListContainer from '@/component/IssueListContainer'
+import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
+import axios from 'axios'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 
 type Props = {}
 
@@ -11,6 +13,18 @@ const AdminCMSPage = (props: Props) => {
   const onAddNewIssue = () => {
     router.push('/issue-add')
   }
+  const {initializeIssuesSheetData, issuesData} = useContext(GoogleSheetDataContext)
+  // get from api
+  useEffect(() => {
+    if(issuesData.length) {
+      return;
+    }
+    axios
+      .get("/api/getIssuesData")
+      .then(res => {
+        initializeIssuesSheetData(res.data.issues)
+      })
+  },[issuesData])
   return (
     <div>
       <h1> ปัญหาทั้งหมด</h1>

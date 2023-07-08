@@ -1,9 +1,10 @@
 'use client'
 import IssueForm from '@/component/IssueForm'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { guidGenerator } from '../utils/uiHelper'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
 interface Props {
   params: {
     id: string
@@ -13,6 +14,7 @@ const Page = ({ params }: Props) => {
   const router = useRouter()
   const id = params.id
   const [generatedIssueId, setGeneratedIssueId] = useState<string>('')
+  const {initializeIssuesSheetData} = useContext(GoogleSheetDataContext)
   const [formData, setFormData] = useState<any>({})
   useEffect(() => {
     if (generatedIssueId) {
@@ -43,8 +45,13 @@ const Page = ({ params }: Props) => {
     }
     axios
       .post("/api/saveForm", completedSaveForm)
-      .then(res => {
+      .then(_ => {
         router.push('/admin-cms-page')
+        axios
+          .get("/api/getIssuesData")
+          .then(res => {
+            initializeIssuesSheetData(res.data.issues)
+          })
       })
       .catch(err => {
         console.log(err.message);

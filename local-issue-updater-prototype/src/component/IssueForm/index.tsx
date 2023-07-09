@@ -11,14 +11,14 @@ type Props = {
 }
 const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormData }: Props) => {
     //todo: use id to prefill id the form is editing form
-    const [status, setStatus] = useState(isEditMode ? prefillFormData?.status :"recieved");
+    const [status, setStatus] = useState(isEditMode ? prefillFormData?.status :"รับเรื่องปัญหา");
     const [issueDetail, setIssueDetail] = useState("");
-    const [type, setType] = useState(isEditMode ? prefillFormData?.type :"1");
-    const [area, setArea] = useState(isEditMode ? prefillFormData?.area :"jomtong");
+    const [type, setType] = useState(isEditMode ? prefillFormData?.type :"ถนน");
+    const [area, setArea] = useState(isEditMode ? prefillFormData?.area :"จอมทอง");
     const [reporterName, setReporterName] = useState("");
     const [reporterPhoneNumber, setReporterPhoneNumber] = useState("");
     const [ps, setPs] = useState("");
-    const [severity, setSeverity] = useState(isEditMode ? prefillFormData?.severity : "critical");
+    const [severity, setSeverity] = useState(isEditMode ? prefillFormData?.severity : "วิกฤติ");
 
     // prefill everything if it is edit mode
     useEffect(() => {

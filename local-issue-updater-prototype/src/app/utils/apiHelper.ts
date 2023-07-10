@@ -108,6 +108,40 @@
 //     })
 //     return objectifyedRecords
 // }
+// Delete data (used for updating purpose, just delete -> add updated one)
+// export const deleteGoogleSheetIssueData = async (rowNumber:number) => {
+//     const sheets = await connectGoogleSheetsApi()
+//     const request = {
+//         // The ID of the spreadsheet to update.
+//         spreadsheetId: "1Pv6xHZSKq_QXNGrI3XZWSPPuXUAL9f-YRX-B7MQrTKA",
+    
+//         // The A1 notation of the values to clear.
+//         range: `A${rowNumber}:L${rowNumber}`,  // TODO: Update placeholder value.
+//         resource: {
+//           // TODO: Add desired properties to the request body.
+//         },
+//       };
+//     return sheets.spreadsheets.values.clear(request);
+// }
+
+// export const getGoogleDriveAuthConfig = async () => {
+//     const ggDriveCredential = JSON.parse(
+//         Buffer.from(process.env.GG_DRIVE_KEY_BASE64 || '', "base64").toString()
+//     );
+//     //generate a json file to store a keyfile
+//     await singleObjJsonFileGenerator(ggDriveCredential, GOOGLE_DRIVE_KEYFILE_PATH);
+//     const GOOGLE_DRIVE_AUTH_CONFIG: GoogleAuthOptions = {
+//         scopes: DRIVE_API_SCOPES,
+//         /**
+//          * @note keyfile from secrets folder local test.
+//          * Use keyfile from generated one instead on the production with keys from the env vars
+//         */
+//         //keyFile: './secrets/googleDriveKeyFile.json'
+//         keyFile: GOOGLE_DRIVE_KEYFILE_PATH,
+//     }
+//     return GOOGLE_DRIVE_AUTH_CONFIG;
+// }
+
 
 
 // local env
@@ -224,3 +258,16 @@ export const deleteGoogleSheetIssueData = async (rowNumber:number) => {
       };
     return sheets.spreadsheets.values.clear(request);
 }
+
+export const getGoogleDriveAuthConfig = async () => {
+    const GOOGLE_DRIVE_AUTH_CONFIG: GoogleAuthOptions = {
+        scopes: ['https://www.googleapis.com/auth/drive.file'],
+        /**
+         * @note keyfile from secrets folder local test.
+         * Use keyfile from generated one instead on the production with keys from the env vars
+        */
+        keyFile: './secrets/googleDriveKeyFile.json',
+    }
+    return GOOGLE_DRIVE_AUTH_CONFIG;
+}
+

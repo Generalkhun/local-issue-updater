@@ -216,8 +216,8 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormDa
                 {areaImages['ps'] &&
                     areaImages['ps'].map((image, index) => (
                         <div key={index}>
-                            <img src={URL.createObjectURL(image)} alt="Preview" />
-                            <button onClick={() => handleDeleteAreaImage('before', index)}>
+                            <img width='200px' src={URL.createObjectURL(image)} alt="Preview" />
+                            <button onClick={() => handleDeleteAreaImage('ps', index)}>
                                 X
                             </button>
                         </div>
@@ -245,7 +245,7 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormDa
                 {areaImages['before'] &&
                     areaImages['before'].map((image, index) => (
                         <div key={index}>
-                            <img src={URL.createObjectURL(image)} alt="Preview" />
+                            <img width='200px' src={URL.createObjectURL(image)} alt="Preview" />
                             <button onClick={() => handleDeleteAreaImage('before', index)}>
                                 X
                             </button>
@@ -262,7 +262,7 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormDa
                 {areaImages['after'] &&
                     areaImages['after'].map((image, index) => (
                         <div key={index}>
-                            <img src={URL.createObjectURL(image)} alt="Preview" />
+                            <img width='200px' src={URL.createObjectURL(image)} alt="Preview" />
                             <button onClick={() => handleDeleteAreaImage('after', index)}>
                                 X
                             </button>

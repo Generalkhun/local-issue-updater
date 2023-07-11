@@ -2,6 +2,7 @@
 import { getlocalISOTime } from '@/app/utils/uiHelper'
 import IssueForm from '@/component/IssueForm'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
+import useInputImageAreaForm from '@/hooks/useInputImageAreaForm'
 import { IssueItem } from '@/types'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -16,6 +17,11 @@ const Page = ({ params }: Props) => {
     const id = params.id
     const router = useRouter()
     const { issuesData, initializeIssuesSheetData } = useContext(GoogleSheetDataContext)
+    const {
+        areaImages,
+        handleAreaImageChange,
+        handleDeleteAreaImage,
+    } = useInputImageAreaForm()
     const [formData, setFormData] = useState<any>(issuesData.filter((issue: IssueItem) => issue.id === id)[0])
     const onFormDataChange = useCallback((updatedFormData: Record<any, any>) => {
         setFormData((prev: any) => ({
@@ -47,11 +53,13 @@ const Page = ({ params }: Props) => {
     return <div>
         <h1>แก้ไขข้อมูล ปัญหารหัส: {id}</h1>
         <IssueForm
+            areaImages={areaImages}
+            handleAreaImageChange={handleAreaImageChange}
+            handleDeleteAreaImage={handleDeleteAreaImage}
             prefillFormData={formData}
             isEditMode={true}
             onFormDataChange={onFormDataChange}
             onSaveForm={onSaveEditForm}
-            id={id}
         />
     </div>
 }

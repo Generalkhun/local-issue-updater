@@ -3,13 +3,23 @@ import { IssueItem } from '@/types';
 import React, { useEffect, useState } from 'react'
 
 type Props = {
-    id: string;
+    areaImages: Record<string, File[]>
+    handleAreaImageChange: (event: React.ChangeEvent<HTMLInputElement>, areaName: string) => void;
+    handleDeleteAreaImage: (areaName: string, idx: number) => void;
     onSaveForm: () => void
     onFormDataChange: (updatedFormData: Record<any, any>) => void;
     isEditMode?: boolean;
     prefillFormData?: IssueItem;
 }
-const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormData }: Props) => {
+const IssueForm = ({
+    onSaveForm,
+    onFormDataChange,
+    isEditMode,
+    prefillFormData,
+    areaImages,
+    handleAreaImageChange,
+    handleDeleteAreaImage,
+}: Props) => {
     //todo: use id to prefill id the form is editing form
     const [status, setStatus] = useState(isEditMode ? prefillFormData?.status : "รับเรื่องปัญหา");
     const [issueDetail, setIssueDetail] = useState("");
@@ -23,7 +33,7 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormDa
     // const [imagesBeforeFix, setImagesBeforeFix] = useState<File[] | null>(null);
     // const [imagesAfterFix, setImagesAfterFix] = useState<File[] | null>(null);
     // const [imagesPS, setImagesPS] = useState<File[] | null>(null);
-    const [areaImages, setAreaImages] = useState<Record<string, File[]>>({});
+    //const [areaImages, setAreaImages] = useState<Record<string, File[]>>({});
 
 
 
@@ -97,38 +107,26 @@ const IssueForm = ({ id, onSaveForm, onFormDataChange, isEditMode, prefillFormDa
         onFormDataChange({ severity })
     }, [severity, onFormDataChange])
 
-    // const handleImagesBeforeFixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // const handleAreaImageChange = (
+    //     e: React.ChangeEvent<HTMLInputElement>,
+    //     area: string
+    // ) => {
     //     if (e.target.files && e.target.files.length > 0) {
-    //         setImagesBeforeFix(e.target.files[0]);
+    //         const newImages = Array.from(e.target.files);
+    //         setAreaImages((prevImages) => ({
+    //             ...prevImages,
+    //             [area]: [...(prevImages[area] || []), ...newImages],
+    //         }));
     //     }
     // };
 
-    // const handleImage2Change = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     if (e.target.files && e.target.files.length > 0) {
-    //         setImage2(e.target.files[0]);
-    //     }
+    // const handleDeleteAreaImage = (area: string, index: number) => {
+    //     setAreaImages((prevImages) => {
+    //         const updatedImages = [...(prevImages[area] || [])];
+    //         updatedImages.splice(index, 1);
+    //         return { ...prevImages, [area]: updatedImages };
+    //     });
     // };
-
-    const handleAreaImageChange = (
-        e: React.ChangeEvent<HTMLInputElement>,
-        area: string
-    ) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const newImages = Array.from(e.target.files);
-            setAreaImages((prevImages) => ({
-                ...prevImages,
-                [area]: [...(prevImages[area] || []), ...newImages],
-            }));
-        }
-    };
-
-    const handleDeleteAreaImage = (area: string, index: number) => {
-        setAreaImages((prevImages) => {
-            const updatedImages = [...(prevImages[area] || [])];
-            updatedImages.splice(index, 1);
-            return { ...prevImages, [area]: updatedImages };
-        });
-    };
 
 
     return (

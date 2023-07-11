@@ -1,21 +1,22 @@
 'use client'
 import IssueForm from '@/component/IssueForm'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { getlocalISOTime, guidGenerator } from '../utils/uiHelper'
+import { getlocalISOTime, guidGenerator, saveImgToGGDrive } from '../utils/uiHelper'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
-interface Props {
-  params: {
-    id: string
-  }
-}
-const Page = ({ params }: Props) => {
+import useInputImageAreaForm from '@/hooks/useInputImageAreaForm'
+
+const Page = () => {
   const router = useRouter()
-  const id = params.id
   const [generatedIssueId, setGeneratedIssueId] = useState<string>('')
-  const {initializeIssuesSheetData} = useContext(GoogleSheetDataContext)
+  const { initializeIssuesSheetData } = useContext(GoogleSheetDataContext)
   const [formData, setFormData] = useState<any>({})
+  const {
+    areaImages,
+    handleAreaImageChange,
+    handleDeleteAreaImage,
+  } = useInputImageAreaForm()
   useEffect(() => {
     if (generatedIssueId) {
       return;
@@ -42,6 +43,17 @@ const Page = ({ params }: Props) => {
       datetimeReport: localISOTime,
       latestDatetimeUpdate: localISOTime,
     }
+    // save img(s) to drive
+    Object.keys(areaImages).forEach((area:string) => {
+      saveImgToGGDrive(areaImages[area], `${area}:${id}`)
+    })
+
+    axios
+      .post("/api/updateIssueData",)
+      .catch(err => {
+        console.error(err.message);
+      })
+    // save form data to google sheet
     axios
       .post("/api/saveForm", completedSaveForm)
       .then(_ => {
@@ -53,7 +65,7 @@ const Page = ({ params }: Props) => {
           })
       })
       .catch(err => {
-        console.log(err.message);
+        console.error(err.message);
       });
   }
   return <div>
@@ -61,7 +73,12 @@ const Page = ({ params }: Props) => {
       <button onClick={onClickCancel}>ยกเลิก</button>
       <h1>เพิ่มปัญหาใหม่ (id: {generatedIssueId})</h1>
     </div>
-    <IssueForm onFormDataChange={onFormDataChange} onSaveForm={onSaveAddForm} id={id} />
+    <IssueForm
+      areaImages={areaImages}
+      handleAreaImageChange={handleAreaImageChange}
+      handleDeleteAreaImage={handleDeleteAreaImage}
+      onFormDataChange={onFormDataChange}
+      onSaveForm={onSaveAddForm} />
   </div>
 }
 

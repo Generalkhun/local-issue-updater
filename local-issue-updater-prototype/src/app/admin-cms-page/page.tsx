@@ -19,11 +19,17 @@ const AdminCMSPage = (props: Props) => {
     if(issuesData.length) {
       return;
     }
-    axios
-      .get("/api/getIssuesData")
+    // axios
+    //   .get("/api/getIssuesData")
+    fetch("/api/getIssuesData",{ cache: 'no-store' })
       .then(res => {
-        initializeIssuesSheetData(res.data.issues)
+        res.json()
+        .then(r => {
+          console.log("🚀 ~ file: page.tsx:28 ~ useEffect ~ r:", r)
+          initializeIssuesSheetData(r.data.issues)
+        })
       })
+
   },[issuesData])
   return (
     <div>

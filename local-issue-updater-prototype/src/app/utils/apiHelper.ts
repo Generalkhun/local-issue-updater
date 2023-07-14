@@ -168,7 +168,7 @@ export const saveFormToGGSheet = async (formData: any, row?: number) => {
 
     // request 
     const request = {
-        spreadsheetId: "1Pv6xHZSKq_QXNGrI3XZWSPPuXUAL9f-YRX-B7MQrTKA",
+        spreadsheetId: process.env.SHEET_ID,
         range: row ? `test-issues!A${row}:L${row}`:SHEET_RANGE_ADD,
         valueInputOption: 'USER_ENTERED',
         insertDataOption: row ? 'OVERWRITE' : 'INSERT_ROWS',
@@ -186,7 +186,7 @@ export const getIssuesDataFromGGSheet = async () => {
     const sheets = await connectGoogleSheetsApi()
     //query and return response
     const response = await sheets.spreadsheets.values.get({
-        spreadsheetId: "1Pv6xHZSKq_QXNGrI3XZWSPPuXUAL9f-YRX-B7MQrTKA",
+        spreadsheetId: process.env.SHEET_ID,
         range: 'test-issues!A1:K'
     })
     return formatGoogleSheetDataResponse(get(response, 'data.values'))

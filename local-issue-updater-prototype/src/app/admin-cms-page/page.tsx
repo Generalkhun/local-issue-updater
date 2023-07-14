@@ -1,5 +1,6 @@
 
 'use client'
+export const dynamic = 'force-dynamic'
 import IssueListContainer from '@/component/IssueListContainer'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
 import axios from 'axios'
@@ -19,8 +20,6 @@ const AdminCMSPage = (props: Props) => {
     if (issuesData.length) {
       return;
     }
-    // axios
-    //   .get("/api/getIssuesData")
     fetch("/api/getIssuesData", { cache: 'no-store' })
       .then(res => {
         res.json()

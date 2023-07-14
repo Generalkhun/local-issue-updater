@@ -57,11 +57,18 @@ const Page = () => {
       .post("/api/saveForm", completedSaveForm)
       .then(_ => {
         router.push('/admin-cms-page')
-        axios
-          .get("/api/getIssuesData")
-          .then(res => {
-            initializeIssuesSheetData(res.data.issues)
-          })
+        fetch("/api/getIssuesData", { cache: 'no-store' })
+        .then(res => {
+          res.json()
+            .then(r => {
+              initializeIssuesSheetData(r.issues)
+            })
+        })
+        // axios
+        //   .get("/api/getIssuesData")
+        //   .then(res => {
+        //     initializeIssuesSheetData(res.data.issues)
+        //   })
       })
       .catch(err => {
         console.error(err.message);

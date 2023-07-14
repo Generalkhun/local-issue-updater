@@ -38,11 +38,18 @@ const Page = ({ params }: Props) => {
             .post("/api/updateIssueData", completedSaveForm)
             .then(_ => {
                 router.push('/admin-cms-page')
-                axios
-                    .get("/api/getIssuesData")
+                fetch("/api/getIssuesData", { cache: 'no-store' })
                     .then(res => {
-                        initializeIssuesSheetData(res.data.issues)
+                        res.json()
+                            .then(r => {
+                                initializeIssuesSheetData(r.issues)
+                            })
                     })
+                // axios
+                //     .get("/api/getIssuesData")
+                //     .then(res => {
+                //         initializeIssuesSheetData(res.data.issues)
+                //     })
             })
             .catch(err => {
                 throw new Error(err)

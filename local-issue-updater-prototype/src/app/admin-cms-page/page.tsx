@@ -13,24 +13,23 @@ const AdminCMSPage = (props: Props) => {
   const onAddNewIssue = () => {
     router.push('/issue-add')
   }
-  const {initializeIssuesSheetData, issuesData} = useContext(GoogleSheetDataContext)
+  const { initializeIssuesSheetData, issuesData } = useContext(GoogleSheetDataContext)
   // get from api
   useEffect(() => {
-    if(issuesData.length) {
+    if (issuesData.length) {
       return;
     }
     // axios
     //   .get("/api/getIssuesData")
-    fetch("/api/getIssuesData",{ cache: 'no-store' })
+    fetch("/api/getIssuesData", { cache: 'no-store' })
       .then(res => {
         res.json()
-        .then(r => {
-          console.log("🚀 ~ file: page.tsx:28 ~ useEffect ~ r:", r)
-          initializeIssuesSheetData(r.data.issues)
-        })
+          .then(r => {
+            initializeIssuesSheetData(r.issues)
+          })
       })
 
-  },[issuesData])
+  }, [issuesData])
   return (
     <div>
       <h1> ปัญหาทั้งหมด</h1>

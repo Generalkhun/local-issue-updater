@@ -15,10 +15,17 @@ const Page = ({ params }: Props) => {
         if (!!thisIssueData) {
             return;
         }
-        axios
-            .get("/api/getIssuesData")
+        // axios
+        //     .get("/api/getIssuesData")
+        //     .then(res => {
+        //         setThisIssueData(res.data.issues.filter((issue: IssueItem) => issue.id === id)[0])
+        //     })
+        fetch("/api/getIssuesData", { cache: 'no-store' })
             .then(res => {
-                setThisIssueData(res.data.issues.filter((issue: IssueItem) => issue.id === id)[0])
+                res.json()
+                    .then(r => {
+                        setThisIssueData(r.issues.filter((issue: IssueItem) => issue.id === id)[0])
+                    })
             })
     }, [thisIssueData])
     return (

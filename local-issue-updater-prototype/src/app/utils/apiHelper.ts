@@ -189,6 +189,8 @@ export const getIssuesDataFromGGSheet = async () => {
         spreadsheetId: process.env.SHEET_ID,
         range: 'test-issues!A1:K'
     })
+
+    console.log("🚀 ~ file: apiHelper.ts:193 ~ getIssuesDataFromGGSheet ~ formatGoogleSheetDataResponse(get(response, 'data.values')):", formatGoogleSheetDataResponse(get(response, 'data.values')))
     return formatGoogleSheetDataResponse(get(response, 'data.values'))
 }
 

@@ -26,6 +26,7 @@ const AdminCMSPage = (props: Props) => {
         res.json()
           .then(r => {
             initializeIssuesSheetData(r.issues)
+            console.log("🚀 ~ file: page.tsx:29 ~ useEffect ~ r.issues:", r.issues)
           })
       })
 

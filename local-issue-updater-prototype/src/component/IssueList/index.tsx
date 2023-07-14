@@ -1,6 +1,6 @@
 'use client';
 import { IssueItem } from '@/types'
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 type Props = {
@@ -59,11 +59,13 @@ const IssueList = ({ issues }: Props) => {
                                 <div>
                                     <div style={{
                                         display: 'flex',
+                                        gap: '4px',
                                         flexDirection: 'column',
                                     }}>
                                         <button onClick={onClickShare}>คัดลอกลิ้ง</button>
                                         <button onClick={() => onClickDetail(issue.id)}>รายละเอียด</button>
                                         <button onClick={() => router.push(`/issue-edit/${issue.id}`)}>แก้ไข</button>
+                                        <button onClick={() => router.push(`/issue-preview/${issue.id}`)}>พรีวิว</button>
                                     </div>
                                 </div>
                             </div>

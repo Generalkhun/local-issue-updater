@@ -47,11 +47,11 @@ const Page = () => {
      * @todo implement saving image to gg drive correctly. Right now not able to pass the right Blob file with path
      */
     // save img(s) to drive
-    // Object.keys(areaImages).forEach((area:string) => {
-    //   areaImages[area].forEach((file:File,idx) => {
-    //     saveImgToGGDrive(file, `${generatedIssueId}:${area}:${idx}`);
-    //   })
-    // })
+    Object.keys(areaImages).forEach((area:string) => {
+      areaImages[area].forEach((file:File,idx) => {
+        saveImgToGGDrive(file, `${generatedIssueId}_${area}_${idx}`);
+      })
+    })
     // save form data to google sheet
     axios
       .post("/api/saveForm", completedSaveForm)

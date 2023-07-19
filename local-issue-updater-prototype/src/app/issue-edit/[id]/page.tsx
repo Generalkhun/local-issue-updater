@@ -1,5 +1,5 @@
 'use client'
-import { getlocalISOTime } from '@/app/utils/uiHelper'
+import { getlocalISOTime, saveImgToGGDrive } from '@/app/utils/uiHelper'
 import IssueForm from '@/component/IssueForm'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
 import useInputImageAreaForm from '@/hooks/useInputImageAreaForm'
@@ -34,6 +34,13 @@ const Page = ({ params }: Props) => {
             ...formData,
             latestDatetimeUpdate: getlocalISOTime(),
         }
+        // save img(s) to drive
+        /**@note file name containing "-" will make it's path tobe undefined, so we remove - from the file name for now (will matchable with the id later, anyway) */
+        Object.keys(areaImages).forEach((area: string) => {
+            areaImages[area].forEach((file: File, idx) => {
+                saveImgToGGDrive(file, `${id}_${area}_${idx}.png`.replace(/-/g, ''));
+            })
+        })
         axios
             .post("/api/updateIssueData", completedSaveForm)
             .then(_ => {

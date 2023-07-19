@@ -16,14 +16,14 @@ export const getlocalISOTime = () => {
 export const saveImgToGGDrive = async (imgFile: File, fileName: string) => {
 
     const form = new FormData()
-    form.append("file", imgFile)
+    form.append("file", imgFile, fileName)
 
     const res = await axios({
         method: 'post',
         headers: {
             'content-type': 'multipart/form-data'
         },
-        url: 'api/saveImageToGGDrive',
+        url: '/api/saveImageToGGDrive',
         data: form
     })
 

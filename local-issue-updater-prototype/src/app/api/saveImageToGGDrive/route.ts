@@ -2,8 +2,18 @@ import { google } from "googleapis";
 import type { NextApiResponse } from "next";
 import { get } from "lodash";
 import { getGoogleDriveAuthConfig } from "@/app/utils/apiHelper";
+import fs from 'fs'
+import path from "path";
 
-export async function uploadFile(file: any) {
+async function uploadFile(file: any) {
+    const tempFilePath = path.join("/tmp/", file.name);
+    const fileStream = fs.createWriteStream(tempFilePath);
+    await new Promise((resolve, reject) => {
+      file.stream.pipe(fileStream);
+      file.stream.on("end", resolve);
+      file.stream.on("error", reject);
+    });
+  
     let authServiceAccount;
     const googleDriveAuthConfig = await getGoogleDriveAuthConfig()
     try {
@@ -13,7 +23,7 @@ export async function uploadFile(file: any) {
     }
     const drive = google.drive({ version: "v3", auth: authServiceAccount });
     const media = {
-        body: file.stream()
+        body: fs.createReadStream(tempFilePath),
     };
 
     try {
@@ -34,14 +44,10 @@ export async function uploadFile(file: any) {
     }
 
 }
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};
 export async function POST(req: any, res: NextApiResponse) {
     const formData = await req.formData();
     const file = formData.get('file');
+    file.path = URL.createObjectURL(file)
     const savedFile = await uploadFile(file)
     res.status(200).json({ imgIdGGdrive: get(savedFile, 'data.id') });
 };

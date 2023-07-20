@@ -38,7 +38,7 @@ const Page = ({ params }: Props) => {
         /**@note file name containing "-" will make it's path tobe undefined, so we remove - from the file name for now (will matchable with the id later, anyway) */
         Object.keys(areaImages).forEach((area: string) => {
             areaImages[area].forEach((file: File, idx) => {
-                saveImgToGGDrive(file, `${id}_${area}_${idx}.png`.replace(/-/g, ''));
+                saveImgToGGDrive(file, `${id}_${area}_${idx}`);
             })
         })
         axios

@@ -4,16 +4,35 @@ import { get } from "lodash";
 import { getGoogleDriveAuthConfig } from "@/app/utils/apiHelper";
 import fs from 'fs'
 import path from "path";
+import { NextResponse } from "next/server";
 
-async function uploadFile(file: any) {
-    const tempFilePath = path.join("/tmp/", file.name);
-    const fileStream = fs.createWriteStream(tempFilePath);
-    await new Promise((resolve, reject) => {
-      file.stream.pipe(fileStream);
-      file.stream.on("end", resolve);
-      file.stream.on("error", reject);
+// Function to save a File object to a given directory.
+const saveFileToDirectory = async (file: File, targetDirectory: string): Promise<string> => {
+    // Check if the target directory exists. If not, create it.
+    if (!fs.existsSync(targetDirectory)) {
+        fs.mkdirSync(targetDirectory, { recursive: true });
+    }
+
+    // Construct the file path using the target directory and the file name.
+    const filePath = path.join(targetDirectory, file.name);
+
+    // Use the fs module to write the file to the target directory.
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    fs.writeFile(filePath, Buffer.from(buffer), (err) => {
+        if (err) {
+            console.error('Error saving file to directory:', err);
+        } else {
+            console.log(`File saved successfully to: ${filePath}`);
+        }
     });
-  
+    return filePath
+}
+
+async function uploadFile(file: File) {
+
+    const filePath = await saveFileToDirectory(file, '/tmp/');
+
     let authServiceAccount;
     const googleDriveAuthConfig = await getGoogleDriveAuthConfig()
     try {
@@ -23,7 +42,7 @@ async function uploadFile(file: any) {
     }
     const drive = google.drive({ version: "v3", auth: authServiceAccount });
     const media = {
-        body: fs.createReadStream(tempFilePath),
+        body: fs.createReadStream(filePath),
     };
 
     try {
@@ -47,7 +66,7 @@ async function uploadFile(file: any) {
 export async function POST(req: any, res: NextApiResponse) {
     const formData = await req.formData();
     const file = formData.get('file');
-    file.path = URL.createObjectURL(file)
     const savedFile = await uploadFile(file)
-    res.status(200).json({ imgIdGGdrive: get(savedFile, 'data.id') });
+    //res.status(200).json({ imgIdGGdrive: get(savedFile, 'data.id') });
+    return NextResponse.json({ imgIdGGdrive: get(savedFile, 'data.id') })
 };

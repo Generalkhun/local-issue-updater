@@ -12,6 +12,7 @@ const Page = () => {
   const [generatedIssueId, setGeneratedIssueId] = useState<string>('')
   const { initializeIssuesSheetData } = useContext(GoogleSheetDataContext)
   const [formData, setFormData] = useState<any>({})
+  const [isSaving, setIsSaving] = useState<boolean>(false)
   const {
     areaImages,
     handleAreaImageChange,
@@ -36,6 +37,7 @@ const Page = () => {
   }
 
   const onSaveAddForm = () => {
+    setIsSaving(true);
     const localISOTime = getlocalISOTime()
     const completedSaveForm = {
       id: generatedIssueId,
@@ -47,9 +49,9 @@ const Page = () => {
      * @todo implement saving image to gg drive correctly. Right now not able to pass the right Blob file with path
      */
     // save img(s) to drive
-    Object.keys(areaImages).forEach((area:string) => {
-      areaImages[area].forEach((file:File,idx) => {
-        saveImgToGGDrive(file, `${generatedIssueId}_${area}_${idx}`);
+    Object.keys(areaImages).forEach((area: string) => {
+      areaImages[area].forEach((file: File, idx) => {
+        saveImgToGGDrive(file, `${generatedIssueId}_${area}_${idx}`)
       })
     })
     // save form data to google sheet
@@ -65,7 +67,7 @@ const Page = () => {
       })
       .catch(err => {
         console.error(err.message);
-      });
+      })
   }
   return <div>
     <div>
@@ -77,7 +79,10 @@ const Page = () => {
       handleAreaImageChange={handleAreaImageChange}
       handleDeleteAreaImage={handleDeleteAreaImage}
       onFormDataChange={onFormDataChange}
-      onSaveForm={onSaveAddForm} />
+      onSaveForm={onSaveAddForm}
+      isSaving={isSaving}
+
+    />
   </div>
 }
 

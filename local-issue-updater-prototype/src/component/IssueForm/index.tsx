@@ -10,6 +10,7 @@ type Props = {
     onFormDataChange: (updatedFormData: Record<any, any>) => void;
     isEditMode?: boolean;
     prefillFormData?: IssueItem;
+    isSaving: boolean;
 }
 const IssueForm = ({
     onSaveForm,
@@ -19,6 +20,7 @@ const IssueForm = ({
     areaImages,
     handleAreaImageChange,
     handleDeleteAreaImage,
+    isSaving,
 }: Props) => {
     //todo: use id to prefill id the form is editing form
     const [status, setStatus] = useState(isEditMode ? prefillFormData?.status : "รับเรื่องปัญหา");
@@ -29,13 +31,6 @@ const IssueForm = ({
     const [reporterPhoneNumber, setReporterPhoneNumber] = useState("");
     const [ps, setPs] = useState("");
     const [severity, setSeverity] = useState(isEditMode ? prefillFormData?.severity : "วิกฤติ");
-
-    // const [imagesBeforeFix, setImagesBeforeFix] = useState<File[] | null>(null);
-    // const [imagesAfterFix, setImagesAfterFix] = useState<File[] | null>(null);
-    // const [imagesPS, setImagesPS] = useState<File[] | null>(null);
-    //const [areaImages, setAreaImages] = useState<Record<string, File[]>>({});
-
-
 
     // prefill everything if it is edit mode
     useEffect(() => {
@@ -106,28 +101,6 @@ const IssueForm = ({
         }
         onFormDataChange({ severity })
     }, [severity, onFormDataChange])
-
-    // const handleAreaImageChange = (
-    //     e: React.ChangeEvent<HTMLInputElement>,
-    //     area: string
-    // ) => {
-    //     if (e.target.files && e.target.files.length > 0) {
-    //         const newImages = Array.from(e.target.files);
-    //         setAreaImages((prevImages) => ({
-    //             ...prevImages,
-    //             [area]: [...(prevImages[area] || []), ...newImages],
-    //         }));
-    //     }
-    // };
-
-    // const handleDeleteAreaImage = (area: string, index: number) => {
-    //     setAreaImages((prevImages) => {
-    //         const updatedImages = [...(prevImages[area] || [])];
-    //         updatedImages.splice(index, 1);
-    //         return { ...prevImages, [area]: updatedImages };
-    //     });
-    // };
-
 
     return (
         <div>
@@ -267,14 +240,23 @@ const IssueForm = ({
                         </div>
                     ))}
             </div>
-            <button onClick={onSaveForm} style={{
+            {isSaving ? <div style={{
+                width: '400px',
+                height: '80px',
+                marginTop: '20px',
+                borderRadius: '8px',
+                backgroundColor: 'grey',
+                fontSize: '30px',
+            }}>
+                กำลังบันทึก...
+            </div> : <button onClick={onSaveForm} style={{
                 width: '400px',
                 height: '80px',
                 marginTop: '20px',
                 borderRadius: '8px',
                 backgroundColor: 'crimson',
                 fontSize: '30px',
-            }}>บันทึก</button>
+            }}>บันทึก</button>}
         </div>
     )
 }

@@ -67,6 +67,5 @@ export async function POST(req: any, res: NextApiResponse) {
     const formData = await req.formData();
     const file = formData.get('file');
     const savedFile = await uploadFile(file)
-    //res.status(200).json({ imgIdGGdrive: get(savedFile, 'data.id') });
     return NextResponse.json({ imgIdGGdrive: get(savedFile, 'data.id') })
 };

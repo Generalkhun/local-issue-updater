@@ -17,6 +17,7 @@ const Page = ({ params }: Props) => {
     const id = params.id
     const router = useRouter()
     const { issuesData, initializeIssuesSheetData } = useContext(GoogleSheetDataContext)
+    const [isSaving, setIsSaving] = useState<boolean>(false)
     const {
         areaImages,
         handleAreaImageChange,
@@ -30,6 +31,7 @@ const Page = ({ params }: Props) => {
         }))
     }, [setFormData])
     const onSaveEditForm = () => {
+        setIsSaving(true);
         const completedSaveForm = {
             ...formData,
             latestDatetimeUpdate: getlocalISOTime(),
@@ -67,6 +69,7 @@ const Page = ({ params }: Props) => {
             isEditMode={true}
             onFormDataChange={onFormDataChange}
             onSaveForm={onSaveEditForm}
+            isSaving={isSaving}
         />
     </div>
 }

@@ -1,4 +1,6 @@
+import { IssueItem } from "@/types";
 import axios from "axios"
+import { isEmpty } from "lodash";
 export function guidGenerator() {
     const S4 = function () {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -30,4 +32,38 @@ export const saveImgToGGDrive = async (imgFile: File, fileName: string) => {
     const imgURLGGdrive = res.data
 
     return imgURLGGdrive
+}
+
+export const getGGDriveImgURLViewWithId = (imgId: string) => {
+    return `https://drive.google.com/uc?id=${imgId}&export=download`
+}
+
+interface InputImgObject {
+    url: string;
+    name: string;
+}
+
+type GroupOfDisplayingImg = 'ps' | 'before' | 'after' | 'Unknown';
+interface OutputImgObject {
+    group: GroupOfDisplayingImg;
+    url: string;
+}
+
+export const extractIssueImageData = (imgsInfo: string): OutputImgObject[] | [] => {
+    if(isEmpty(imgsInfo)) {
+        return []
+    }
+    const inputArray: InputImgObject[] = JSON.parse(imgsInfo.replace(/&quot;/ig,'"'))
+    const outputArray: OutputImgObject[] = inputArray.map((item: InputImgObject) => {
+        const nameParts = item.name.split('_');
+        const group = (nameParts.length >= 2 ? nameParts[1] : 'Unknown') as GroupOfDisplayingImg; // Assuming "Unknown" when group name is missing or in an incorrect format
+
+        return {
+            group,
+            url: item.url,
+        };
+    });
+
+    console.log("🚀 ~ file: uiHelper.ts:68 ~ extractIssueImageData ~ outputArray:", outputArray)
+    return outputArray;
 }

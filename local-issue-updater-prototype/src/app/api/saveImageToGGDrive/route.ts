@@ -67,5 +67,17 @@ export async function POST(req: any, res: NextApiResponse) {
     const formData = await req.formData();
     const file = formData.get('file');
     const savedFile = await uploadFile(file)
-    return NextResponse.json({ imgIdGGdrive: get(savedFile, 'data.id') })
+    console.log("🚀 ~ file: route.ts:70 ~ POST ~ savedFile:", savedFile)
+    console.log("🚀 ~ file: route.ts:70 ~ POST ~ savedFile.data:", savedFile.data)
+    /**
+     * @note returning data from uploadFile is as follow
+     * kind: 'drive#file',
+    *id: '1WIEWZJ8D7OkXcj920Utl-n6ZJt76ahoA',
+    *name: 'd2d54a65-e06f-5649-39e7-fb2e9f096099_ps_0',
+    *mimeType: 'image/png'
+     */
+    return NextResponse.json({
+        imgIdGGdrive: get(savedFile, 'data.id'),
+        imgNameGGdrive: get(savedFile, 'data.name'),
+    })
 };

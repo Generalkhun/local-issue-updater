@@ -11,4 +11,10 @@ export interface IssueItem {
     severity: string;
     datetimeReport: string;
     latestDatetimeUpdate: string;
+    imgsInfo: string;
+}
+
+export interface ImgsInfo {
+    url: string,
+    name: string,
 }

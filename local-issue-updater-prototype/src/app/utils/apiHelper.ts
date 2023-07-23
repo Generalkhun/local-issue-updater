@@ -191,7 +191,7 @@ const transformToArrayTobeAddedToGGSheet = (formData: Object, expectedLength: nu
 export const saveFormToGGSheet = async (formData: any, row?: number) => {
 
     // transform the to arrays format 
-    const tobeAddedDataArray = transformToArrayTobeAddedToGGSheet(formData, 11)
+    const tobeAddedDataArray = transformToArrayTobeAddedToGGSheet(formData, 12)
 
     // connect to the sheet 
     const sheets = await connectGoogleSheetsApi()
@@ -199,7 +199,7 @@ export const saveFormToGGSheet = async (formData: any, row?: number) => {
     // request 
     const request = {
         spreadsheetId: "1Pv6xHZSKq_QXNGrI3XZWSPPuXUAL9f-YRX-B7MQrTKA",
-        range: row ? `test-issues!A${row}:L${row}`:SHEET_RANGE_ADD,
+        range: row ? `test-issues!A${row}:M${row}`:SHEET_RANGE_ADD,
         valueInputOption: 'USER_ENTERED',
         insertDataOption: row ? 'OVERWRITE' : 'INSERT_ROWS',
         requestBody: {
@@ -217,7 +217,7 @@ export const getIssuesDataFromGGSheet = async () => {
     //query and return response
     const response = await sheets.spreadsheets.values.get({
         spreadsheetId: "1Pv6xHZSKq_QXNGrI3XZWSPPuXUAL9f-YRX-B7MQrTKA",
-        range: 'test-issues!A1:K'
+        range: 'test-issues!A1:L'
     })
     return formatGoogleSheetDataResponse(get(response, 'data.values'))
 }

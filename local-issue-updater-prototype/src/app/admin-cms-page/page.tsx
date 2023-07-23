@@ -6,9 +6,7 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import React, { useContext, useEffect } from 'react'
 
-type Props = {}
-
-const AdminCMSPage = (props: Props) => {
+const AdminCMSPage = () => {
   const router = useRouter()
   const onAddNewIssue = () => {
     router.push('/issue-add')

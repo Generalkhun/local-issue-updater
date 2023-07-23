@@ -1,11 +1,13 @@
 'use client'
 import IssueForm from '@/component/IssueForm'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { getlocalISOTime, guidGenerator, saveImgToGGDrive } from '../utils/uiHelper'
+import { getGGDriveImgURLViewWithId, getlocalISOTime, guidGenerator, saveImgToGGDrive } from '../utils/uiHelper'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
 import useInputImageAreaForm from '@/hooks/useInputImageAreaForm'
+import { isEmpty } from 'lodash'
+import { ImgsInfo, IssueItem } from '@/types'
 
 const Page = () => {
   const router = useRouter()
@@ -36,39 +38,84 @@ const Page = () => {
     router.push('/admin-cms-page')
   }
 
-  const onSaveAddForm = () => {
+  const onSaveAddForm = async () => {
     setIsSaving(true);
     const localISOTime = getlocalISOTime()
-    const completedSaveForm = {
-      id: generatedIssueId,
-      ...formData,
-      datetimeReport: localISOTime,
-      latestDatetimeUpdate: localISOTime,
-    }
     /**
      * @todo implement saving image to gg drive correctly. Right now not able to pass the right Blob file with path
      */
     // save img(s) to drive
+    let imgInfoPromises: any = [];
+    // make this wait until this code is complete befor saving data to ggsheet
     Object.keys(areaImages).forEach((area: string) => {
       areaImages[area].forEach((file: File, idx) => {
-        saveImgToGGDrive(file, `${generatedIssueId}_${area}_${idx}`)
-      })
-    })
-    // save form data to google sheet
-    axios
-      .post("/api/saveForm", completedSaveForm)
-      .then(_ => {
-        router.push('/admin-cms-page')
-        axios
-          .get("/api/getIssuesData")
-          .then(res => {
-            initializeIssuesSheetData(res.data.issues)
+        const imgInfoPromise = saveImgToGGDrive(file, `${generatedIssueId}_${area}_${idx}`)
+          .then((res) => {
+            const url = getGGDriveImgURLViewWithId(res.imgIdGGdrive);
+            const name = res.imgNameGGdrive;
+            return {
+              url,
+              name,
+            }
           })
-      })
-      .catch(err => {
-        console.error(err.message);
-      })
-  }
+          .catch((error) => {
+            console.error("Error saving image:", error);
+            return ""; // Return an empty string if there's an error with an image
+          });
+          imgInfoPromises.push(imgInfoPromise);
+      });
+    });
+
+    // const completedSaveForm = {
+    //   id: generatedIssueId,
+    //   ...formData,
+    //   datetimeReport: localISOTime,
+    //   latestDatetimeUpdate: localISOTime,
+    //   imgsURL,
+    // }
+    // // save form data to google sheet
+    // axios
+    //   .post("/api/saveForm", completedSaveForm)
+    //   .then(_ => {
+    //     router.push('/admin-cms-page')
+    //     axios
+    //       .get("/api/getIssuesData")
+    //       .then(res => {
+    //         initializeIssuesSheetData(res.data.issues)
+    //       })
+    //   })
+    //   .catch(err => {
+    //     console.error(err.message);
+    //   })
+    try {
+      const imgsInfoResolved = await Promise.all(imgInfoPromises);
+      //const imgsURL = imgURLs.filter((url) => !isEmpty(url)).join(",");
+      // const imgsURL = imgsInfoResolved.map((info: ImgsInfo) => {
+      //   info.
+      // })
+
+      const completedSaveForm: IssueItem = {
+        id: generatedIssueId,
+        ...formData,
+        datetimeReport: localISOTime,
+        latestDatetimeUpdate: localISOTime,
+        imgsInfo: JSON.stringify(imgsInfoResolved),
+      };
+      console.log("🚀 ~ file: page.tsx:93 ~ onSaveAddForm ~ completedSaveForm:", completedSaveForm)
+
+      // save form data to google sheet
+      await axios.post("/api/saveForm", completedSaveForm);
+      router.push('/admin-cms-page');
+
+      const res = await axios.get("/api/getIssuesData");
+      initializeIssuesSheetData(res.data.issues);
+    } catch (error) {
+      console.error("Error saving form:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return <div>
     <div>
       <button onClick={onClickCancel}>ยกเลิก</button>

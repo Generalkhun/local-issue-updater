@@ -53,7 +53,8 @@ export const extractIssueImageData = (imgsInfo: string): OutputImgObject[] | [] 
     if(isEmpty(imgsInfo)) {
         return []
     }
-    const inputArray: InputImgObject[] = JSON.parse(imgsInfo.replace(/&quot;/ig,'"'))
+    //const inputArray: InputImgObject[] = JSON.parse(imgsInfo.replace(/&quot;/ig,'"'))
+    const inputArray: InputImgObject[] = JSON.parse(imgsInfo)
     const outputArray: OutputImgObject[] = inputArray.map((item: InputImgObject) => {
         const nameParts = item.name.split('_');
         const group = (nameParts.length >= 2 ? nameParts[1] : 'Unknown') as GroupOfDisplayingImg; // Assuming "Unknown" when group name is missing or in an incorrect format
@@ -63,7 +64,5 @@ export const extractIssueImageData = (imgsInfo: string): OutputImgObject[] | [] 
             url: item.url,
         };
     });
-
-    console.log("🚀 ~ file: uiHelper.ts:68 ~ extractIssueImageData ~ outputArray:", outputArray)
     return outputArray;
 }

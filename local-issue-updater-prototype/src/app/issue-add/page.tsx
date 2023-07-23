@@ -101,7 +101,6 @@ const Page = () => {
         latestDatetimeUpdate: localISOTime,
         imgsInfo: JSON.stringify(imgsInfoResolved),
       };
-      console.log("🚀 ~ file: page.tsx:93 ~ onSaveAddForm ~ completedSaveForm:", completedSaveForm)
 
       // save form data to google sheet
       await axios.post("/api/saveForm", completedSaveForm);

@@ -14,9 +14,7 @@ const Page = ({ params }: Props) => {
     const router = useRouter()
     const { issuesData } = useContext(GoogleSheetDataContext)
     const thisIssueData = useMemo(() => issuesData.filter((issue: IssueItem) => issue.id === id)[0], [issuesData])
-    console.log("🚀 ~ file: page.tsx:17 ~ Page ~ thisIssueData:", thisIssueData)
     const imgsInfoDisplay = useMemo(() => extractIssueImageData(thisIssueData.imgsInfo), [extractIssueImageData, thisIssueData.imgsInfo])
-    console.log("🚀 ~ file: page.tsx:18 ~ Page ~ imgsInfoDisplay:", imgsInfoDisplay)
     // const ImgsInfoDisplayPs = useMemo(() => imgsInfoDisplay
     //     .filter(imgInfo => imgInfo.group === 'ps')
     //     .map(imgInfoPS => <img width='200px' src={imgInfoPS.url} />)

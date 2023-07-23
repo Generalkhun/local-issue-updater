@@ -234,7 +234,7 @@ export const formatGoogleSheetDataResponse = (sheetDataArray: any) => {
         for (let i = 0; i < fieldsname.length; i++) {
             namedRecord = {
                 ...namedRecord,
-                [fieldsname[i]]: replace(record[i],/\\|"/g, '')
+                [fieldsname[i]]: fieldsname[i] === 'imgsInfo' ? record[i] : replace(record[i],/\\|"/g, '')
             }
         }
         return namedRecord

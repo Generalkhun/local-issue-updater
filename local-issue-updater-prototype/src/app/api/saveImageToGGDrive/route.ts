@@ -67,8 +67,6 @@ export async function POST(req: any, res: NextApiResponse) {
     const formData = await req.formData();
     const file = formData.get('file');
     const savedFile = await uploadFile(file)
-    console.log("🚀 ~ file: route.ts:70 ~ POST ~ savedFile:", savedFile)
-    console.log("🚀 ~ file: route.ts:70 ~ POST ~ savedFile.data:", savedFile.data)
     /**
      * @note returning data from uploadFile is as follow
      * kind: 'drive#file',

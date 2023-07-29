@@ -33,8 +33,8 @@ const IssueList = ({ issues }: Props) => {
         <div>
             {issues && <div>
                 {
-                    issues.map((issue) => (
-                        <div style={{
+                    issues.map((issue, idx) => (
+                        <div key={idx} style={{
                             borderColor: borderColorMapper(issue.severity),
                             borderStyle: "solid",
                             height: '120px',

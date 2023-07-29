@@ -14,7 +14,7 @@ const Page = ({ params }: Props) => {
     const router = useRouter()
     const { issuesData } = useContext(GoogleSheetDataContext)
     const thisIssueData = useMemo(() => issuesData.filter((issue: IssueItem) => issue.id === id)[0], [issuesData])
-    const imgsInfoParsed: InputImgObject[] = useMemo(() => thisIssueData ? JSON.parse(thisIssueData.imgsInfo) : [],[thisIssueData])
+    const imgsInfoParsed: InputImgObject[] = useMemo(() => thisIssueData?.imgsInfo ? JSON.parse(thisIssueData.imgsInfo) : [],[thisIssueData])
     const imgsInfoDisplay = useMemo(() => imgsInfoParsed ? extractIssueImageData(imgsInfoParsed) : [], [extractIssueImageData, imgsInfoParsed])
     //const imgsInfoDisplay = thisIssueData ? useMemo(() => extractIssueImageData(thisIssueData.imgsInfo), [extractIssueImageData, thisIssueData.imgsInfo]) : []
     return <div>

@@ -52,7 +52,7 @@ async function uploadFile(file: File) {
                 requestBody: {
                     name: file.name,
                     mimeType: file.type,
-                    parents: ["1jwb4lNcF-cgTvfzb4LD2QwYNmmMTevTG"], // remove when on prod
+                    parents:[process.env.GGDRIVE_FOLDER || ""],
                 },
             }
         )

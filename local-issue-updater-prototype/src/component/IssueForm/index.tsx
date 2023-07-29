@@ -36,7 +36,7 @@ const IssueForm = ({
     const [reporterPhoneNumber, setReporterPhoneNumber] = useState("");
     const [ps, setPs] = useState("");
     const [severity, setSeverity] = useState(isEditMode ? prefillFormData?.severity : "วิกฤติ");
-    const imgsInfoParsed: InputImgObject[] = useMemo(() => prefillFormData ? JSON.parse(prefillFormData.imgsInfo) : [],[prefillFormData])
+    const imgsInfoParsed: InputImgObject[] = useMemo(() => prefillFormData?.imgsInfo ? JSON.parse(prefillFormData.imgsInfo) : [],[prefillFormData])
     const imgsInfoDisplay = useMemo(() => imgsInfoParsed ? extractIssueImageData(imgsInfoParsed) : [], [extractIssueImageData, imgsInfoParsed])
     const [displayedImagesThatSavedOnServer, updateDisplayedImagesThatSavedOnServer] = useState(isEditMode ? imgsInfoDisplay : [])
     const [updatedImgsOnServer, setUpdatedImgsOnServer] = useState<{url: string, name: string}[] | []>(imgsInfoParsed);

@@ -1,9 +1,9 @@
 'use client'
-import { extractIssueImageData } from '@/app/utils/uiHelper'
+import { InputImgObject, extractIssueImageData } from '@/app/utils/uiHelper'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
-import { ImgsInfo, IssueItem } from '@/types'
+import { IssueItem } from '@/types'
 import { useRouter } from 'next/navigation'
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useMemo } from 'react'
 interface Props {
     params: {
         id: string
@@ -14,19 +14,9 @@ const Page = ({ params }: Props) => {
     const router = useRouter()
     const { issuesData } = useContext(GoogleSheetDataContext)
     const thisIssueData = useMemo(() => issuesData.filter((issue: IssueItem) => issue.id === id)[0], [issuesData])
-    const imgsInfoDisplay = useMemo(() => extractIssueImageData(thisIssueData.imgsInfo), [extractIssueImageData, thisIssueData.imgsInfo])
-    // const ImgsInfoDisplayPs = useMemo(() => imgsInfoDisplay
-    //     .filter(imgInfo => imgInfo.group === 'ps')
-    //     .map(imgInfoPS => <img width='200px' src={imgInfoPS.url} />)
-    //     , [imgsInfoDisplay])
-    // const ImgsInfoDisplayBefore = useMemo(() => imgsInfoDisplay
-    //     .filter(imgInfo => imgInfo.group === 'before')
-    //     .map(imgInfoPS => <img width='200px' src={imgInfoPS.url} />)
-    //     , [imgsInfoDisplay])
-    // const ImgsInfoDisplayAfter = useMemo(() => imgsInfoDisplay
-    //     .filter(imgInfo => imgInfo.group === 'after')
-    //     .map(imgInfoPS => <img width='200px' src={imgInfoPS.url} />)
-    //     , [imgsInfoDisplay])
+    const imgsInfoParsed: InputImgObject[] = useMemo(() => thisIssueData ? JSON.parse(thisIssueData.imgsInfo) : [],[thisIssueData])
+    const imgsInfoDisplay = useMemo(() => imgsInfoParsed ? extractIssueImageData(imgsInfoParsed) : [], [extractIssueImageData, imgsInfoParsed])
+    //const imgsInfoDisplay = thisIssueData ? useMemo(() => extractIssueImageData(thisIssueData.imgsInfo), [extractIssueImageData, thisIssueData.imgsInfo]) : []
     return <div>
         <div style={{
             display: 'flex',
@@ -44,25 +34,25 @@ const Page = ({ params }: Props) => {
         <div>หมายเหตุ: {thisIssueData.ps}</div>
         <div>ภาพประกอบหมายเหตุ: </div>
         <div>
-            {imgsInfoDisplay
-                .filter(imgInfo => imgInfo.group === 'ps')
-                .map(imgInfoPS => <img width='200px' src={imgInfoPS.url} />)
+            {imgsInfoDisplay && imgsInfoDisplay
+                .filter((imgInfo:any) => imgInfo.group === 'ps')
+                .map((imgInfoPS:any,idx:number) => <img key={idx} width='200px' src={imgInfoPS.url} />)
             }
         </div>
         <div>วันที่รายงานปัญหา: {thisIssueData.datetimeReport}</div>
         <div>วันที่อัพเดตล่าสุด:{thisIssueData.latestDatetimeUpdate} </div>
         <div>รูปก่อนแก้ไข:</div>
         <div>
-            {imgsInfoDisplay
-                .filter(imgInfo => imgInfo.group === 'before')
-                .map(imgInfoPS => <img width='200px' src={imgInfoPS.url} />)
+            {imgsInfoDisplay && imgsInfoDisplay
+                .filter((imgInfo:any) => imgInfo.group === 'before')
+                .map((imgInfoPS:any,idx:number) => <img key={idx} width='200px' src={imgInfoPS.url} />)
             }
         </div>
         <div>รูปหลังแก้ไข:</div>
         <div>
-            {imgsInfoDisplay
-                .filter(imgInfo => imgInfo.group === 'after')
-                .map(imgInfoPS => <img width='200px' src={imgInfoPS.url} />)
+            {imgsInfoDisplay && imgsInfoDisplay
+                .filter((imgInfo:any) => imgInfo.group === 'after')
+                .map((imgInfoPS:any,idx:number) => <img key={idx} width='200px' src={imgInfoPS.url} />)
             }
         </div>
     </div>

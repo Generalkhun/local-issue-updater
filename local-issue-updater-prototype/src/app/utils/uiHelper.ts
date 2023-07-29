@@ -38,24 +38,23 @@ export const getGGDriveImgURLViewWithId = (imgId: string) => {
     return `https://drive.google.com/uc?id=${imgId}&export=download`
 }
 
-interface InputImgObject {
+export interface InputImgObject {
     url: string;
     name: string;
 }
 
 type GroupOfDisplayingImg = 'ps' | 'before' | 'after' | 'Unknown';
-interface OutputImgObject {
+export interface OutputImgObject {
     group: GroupOfDisplayingImg;
     url: string;
 }
 
-export const extractIssueImageData = (imgsInfo: string): OutputImgObject[] | [] => {
-    if(isEmpty(imgsInfo)) {
+export const extractIssueImageData = (imgsInfoParsed: any): OutputImgObject[] | [] => {
+    console.log("🚀 ~ file: uiHelper.ts:53 ~ extractIssueImageData ~ imgsInfoParsed:", imgsInfoParsed)
+    if(isEmpty(imgsInfoParsed)) {
         return []
     }
-    //const inputArray: InputImgObject[] = JSON.parse(imgsInfo.replace(/&quot;/ig,'"'))
-    const inputArray: InputImgObject[] = JSON.parse(imgsInfo)
-    const outputArray: OutputImgObject[] = inputArray.map((item: InputImgObject) => {
+    const outputArray: OutputImgObject[] = imgsInfoParsed.map((item: InputImgObject) => {
         const nameParts = item.name.split('_');
         const group = (nameParts.length >= 2 ? nameParts[1] : 'Unknown') as GroupOfDisplayingImg; // Assuming "Unknown" when group name is missing or in an incorrect format
 

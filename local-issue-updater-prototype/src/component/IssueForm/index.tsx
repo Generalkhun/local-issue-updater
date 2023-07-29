@@ -1,12 +1,17 @@
 
+import { InputImgObject, OutputImgObject, extractIssueImageData } from '@/app/utils/uiHelper';
 import { IssueItem } from '@/types';
-import React, { useEffect, useState } from 'react'
+import { includes } from 'lodash';
+import React, { useEffect, useMemo, useState } from 'react'
 
+interface SaveFormOption {
+    updatedImgsOnServer: {url: string; name: string}[] | [],
+}
 type Props = {
     areaImages: Record<string, File[]>
     handleAreaImageChange: (event: React.ChangeEvent<HTMLInputElement>, areaName: string) => void;
     handleDeleteAreaImage: (areaName: string, idx: number) => void;
-    onSaveForm: () => void
+    onSaveForm: (option? : SaveFormOption) => void
     onFormDataChange: (updatedFormData: Record<any, any>) => void;
     isEditMode?: boolean;
     prefillFormData?: IssueItem;
@@ -31,6 +36,10 @@ const IssueForm = ({
     const [reporterPhoneNumber, setReporterPhoneNumber] = useState("");
     const [ps, setPs] = useState("");
     const [severity, setSeverity] = useState(isEditMode ? prefillFormData?.severity : "วิกฤติ");
+    const imgsInfoParsed: InputImgObject[] = useMemo(() => prefillFormData ? JSON.parse(prefillFormData.imgsInfo) : [],[prefillFormData])
+    const imgsInfoDisplay = useMemo(() => imgsInfoParsed ? extractIssueImageData(imgsInfoParsed) : [], [extractIssueImageData, imgsInfoParsed])
+    const [displayedImagesThatSavedOnServer, updateDisplayedImagesThatSavedOnServer] = useState(isEditMode ? imgsInfoDisplay : [])
+    const [updatedImgsOnServer, setUpdatedImgsOnServer] = useState<{url: string, name: string}[] | []>(imgsInfoParsed);
 
     // prefill everything if it is edit mode
     useEffect(() => {
@@ -101,6 +110,38 @@ const IssueForm = ({
         }
         onFormDataChange({ severity })
     }, [severity, onFormDataChange])
+
+    // update saved image
+    useEffect(() => {
+        const updatedUrls = displayedImagesThatSavedOnServer.map((img) => img.url)
+        console.log("🚀 ~ file: index.tsx:117 ~ useEffect ~ updatedUrls:", updatedUrls)
+        console.log("🚀 ~ file: index.tsx:119 ~ useEffect ~ updatedImgsOnServer:", updatedImgsOnServer)
+        setUpdatedImgsOnServer(
+            prev => (
+                prev.filter(imgObj => updatedUrls.includes(imgObj.url))
+            )
+        )
+    },[displayedImagesThatSavedOnServer,setUpdatedImgsOnServer])
+
+    const handleDeleteSavedImage = (imgUrl: string) => {
+        if (!imgsInfoDisplay.length) {
+            return;
+        }
+        updateDisplayedImagesThatSavedOnServer(prev => (
+            prev.filter(imgObj => imgObj.url !== imgUrl)
+        ))
+    }
+
+    const saveIssueForm = () => {
+        if (!imgsInfoDisplay.length) {
+            onSaveForm();
+            return;
+        }
+        onSaveForm({
+            updatedImgsOnServer,
+        });
+        
+    }
 
     return (
         <div>
@@ -193,6 +234,15 @@ const IssueForm = ({
                             </button>
                         </div>
                     ))}
+                {displayedImagesThatSavedOnServer.length && displayedImagesThatSavedOnServer
+                    .filter(imgInfo => imgInfo.group === 'ps')
+                    .map((imgInfoPS, idx) => <div key={idx}>
+                        <img width='200px' src={imgInfoPS.url} />
+                        <button onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
+                            X
+                        </button>
+                    </div>)
+                }
             </div>
             <div>
                 <label htmlFor='severity'>ความเร่งด่วน</label>
@@ -222,6 +272,15 @@ const IssueForm = ({
                             </button>
                         </div>
                     ))}
+                {displayedImagesThatSavedOnServer.length && displayedImagesThatSavedOnServer
+                    .filter(imgInfo => imgInfo.group === 'before')
+                    .map((imgInfoPS, idx) => <div key={idx}>
+                        <img width='200px' src={imgInfoPS.url} />
+                        <button onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
+                            X
+                        </button>
+                    </div>)
+                }
             </div>
             <div>
                 <p>หลังแก้ไข</p>
@@ -239,6 +298,15 @@ const IssueForm = ({
                             </button>
                         </div>
                     ))}
+                {displayedImagesThatSavedOnServer.length && displayedImagesThatSavedOnServer
+                    .filter(imgInfo => imgInfo.group === 'after')
+                    .map((imgInfoPS, idx) => <div key={idx}>
+                        <img width='200px' src={imgInfoPS.url} />
+                        <button onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
+                            X
+                        </button>
+                    </div>)
+                }
             </div>
             {isSaving ? <div style={{
                 width: '400px',
@@ -249,7 +317,7 @@ const IssueForm = ({
                 fontSize: '30px',
             }}>
                 กำลังบันทึก...
-            </div> : <button onClick={onSaveForm} style={{
+            </div> : <button onClick={saveIssueForm} style={{
                 width: '400px',
                 height: '80px',
                 marginTop: '20px',

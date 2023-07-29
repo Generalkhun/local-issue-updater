@@ -1,5 +1,5 @@
 'use client'
-import { getlocalISOTime, saveImgToGGDrive } from '@/app/utils/uiHelper'
+import { OutputImgObject, getGGDriveImgURLViewWithId, getlocalISOTime, saveImgToGGDrive } from '@/app/utils/uiHelper'
 import IssueForm from '@/component/IssueForm'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
 import useInputImageAreaForm from '@/hooks/useInputImageAreaForm'
@@ -30,32 +30,56 @@ const Page = ({ params }: Props) => {
             ...updatedFormData,
         }))
     }, [setFormData])
-    const onSaveEditForm = () => {
+    const onSaveEditForm = async (p: { updatedImgsOnServer: { url: string; name: string; }[] } | undefined) => {
         setIsSaving(true);
-        const completedSaveForm = {
-            ...formData,
-            latestDatetimeUpdate: getlocalISOTime(),
+        // save new img(s) to drive (deleted image will disappear from the list already)
+        let imgInfoPromises: any = [];
+        if (areaImages.length) {
+            // make this wait until this code is complete befor saving data to ggsheet
+            Object.keys(areaImages).forEach((area: string) => {
+                areaImages[area].forEach((file: File, idx) => {
+                    const imgInfoPromise = saveImgToGGDrive(file, `${id}_${area}_${idx}`)
+                        .then((res) => {
+                            const url = getGGDriveImgURLViewWithId(res.imgIdGGdrive);
+                            const name = res.imgNameGGdrive;
+                            return {
+                                url,
+                                name,
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error saving image:", error);
+                            return ""; // Return an empty string if there's an error with an image
+                        });
+                    imgInfoPromises.push(imgInfoPromise);
+                });
+            });
         }
-        // save img(s) to drive
-        /**@note file name containing "-" will make it's path tobe undefined, so we remove - from the file name for now (will matchable with the id later, anyway) */
-        Object.keys(areaImages).forEach((area: string) => {
-            areaImages[area].forEach((file: File, idx) => {
-                saveImgToGGDrive(file, `${id}_${area}_${idx}`);
-            })
-        })
-        axios
-            .post("/api/updateIssueData", completedSaveForm)
-            .then(_ => {
-                router.push('/admin-cms-page')
-                axios
-                    .get("/api/getIssuesData")
-                    .then(res => {
-                        initializeIssuesSheetData(res.data.issues)
-                    })
-            })
-            .catch(err => {
-                throw new Error(err)
-            })
+
+        try {
+            const imgsInfoResolved = await Promise.all(imgInfoPromises);
+            const updatedImgsOnServer = p?.updatedImgsOnServer;
+            const completedSaveForm = {
+                ...formData,
+                latestDatetimeUpdate: getlocalISOTime(),
+                imgsInfo: JSON.stringify([...imgsInfoResolved, ...updatedImgsOnServer || []]),
+            }
+            axios
+                .post("/api/updateIssueData", completedSaveForm)
+                .then(_ => {
+                    router.push('/admin-cms-page')
+                    axios
+                        .get("/api/getIssuesData")
+                        .then(res => {
+                            initializeIssuesSheetData(res.data.issues)
+                        })
+                })
+                .catch(err => {
+                    throw new Error(err)
+                })
+        } catch (error) {
+
+        }
 
 
     }

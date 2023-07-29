@@ -41,65 +41,38 @@ const Page = () => {
   const onSaveAddForm = async () => {
     setIsSaving(true);
     const localISOTime = getlocalISOTime()
-    /**
-     * @todo implement saving image to gg drive correctly. Right now not able to pass the right Blob file with path
-     */
     // save img(s) to drive
     let imgInfoPromises: any = [];
-    // make this wait until this code is complete befor saving data to ggsheet
-    Object.keys(areaImages).forEach((area: string) => {
-      areaImages[area].forEach((file: File, idx) => {
-        const imgInfoPromise = saveImgToGGDrive(file, `${generatedIssueId}_${area}_${idx}`)
-          .then((res) => {
-            const url = getGGDriveImgURLViewWithId(res.imgIdGGdrive);
-            const name = res.imgNameGGdrive;
-            return {
-              url,
-              name,
-            }
-          })
-          .catch((error) => {
-            console.error("Error saving image:", error);
-            return ""; // Return an empty string if there's an error with an image
-          });
+    if (areaImages.length) {
+      // make this wait until this code is complete befor saving data to ggsheet
+      Object.keys(areaImages).forEach((area: string) => {
+        areaImages[area].forEach((file: File, idx) => {
+          const imgInfoPromise = saveImgToGGDrive(file, `${generatedIssueId}_${area}_${idx}`)
+            .then((res) => {
+              const url = getGGDriveImgURLViewWithId(res.imgIdGGdrive);
+              const name = res.imgNameGGdrive;
+              return {
+                url,
+                name,
+              }
+            })
+            .catch((error) => {
+              console.error("Error saving image:", error);
+              return ""; // Return an empty string if there's an error with an image
+            });
           imgInfoPromises.push(imgInfoPromise);
+        });
       });
-    });
+    }
 
-    // const completedSaveForm = {
-    //   id: generatedIssueId,
-    //   ...formData,
-    //   datetimeReport: localISOTime,
-    //   latestDatetimeUpdate: localISOTime,
-    //   imgsURL,
-    // }
-    // // save form data to google sheet
-    // axios
-    //   .post("/api/saveForm", completedSaveForm)
-    //   .then(_ => {
-    //     router.push('/admin-cms-page')
-    //     axios
-    //       .get("/api/getIssuesData")
-    //       .then(res => {
-    //         initializeIssuesSheetData(res.data.issues)
-    //       })
-    //   })
-    //   .catch(err => {
-    //     console.error(err.message);
-    //   })
     try {
-      const imgsInfoResolved = await Promise.all(imgInfoPromises);
-      //const imgsURL = imgURLs.filter((url) => !isEmpty(url)).join(",");
-      // const imgsURL = imgsInfoResolved.map((info: ImgsInfo) => {
-      //   info.
-      // })
-
+      const imgsInfoResolved = areaImages.length ? await Promise.all(imgInfoPromises) : "";
       const completedSaveForm: IssueItem = {
         id: generatedIssueId,
         ...formData,
         datetimeReport: localISOTime,
         latestDatetimeUpdate: localISOTime,
-        imgsInfo: JSON.stringify(imgsInfoResolved),
+        imgsInfo: areaImages.length ? JSON.stringify(imgsInfoResolved) : "",
       };
 
       // save form data to google sheet

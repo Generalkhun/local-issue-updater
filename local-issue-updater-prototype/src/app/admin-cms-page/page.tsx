@@ -1,5 +1,6 @@
 
 'use client'
+export const dynamic = 'force-dynamic'
 import IssueListContainer from '@/component/IssueListContainer'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
 import axios from 'axios'

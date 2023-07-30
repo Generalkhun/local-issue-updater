@@ -1,6 +1,5 @@
 "use client"
 import { IssueItem } from '@/types'
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
 interface Props {
@@ -15,10 +14,12 @@ const Page = ({ params }: Props) => {
         if (!!thisIssueData) {
             return;
         }
-        axios
-            .get("/api/getIssuesData")
+        fetch("/api/getIssuesData", { cache: 'no-store' })
             .then(res => {
-                setThisIssueData(res.data.issues.filter((issue: IssueItem) => issue.id === id)[0])
+                res.json()
+                    .then(res => {
+                        setThisIssueData(res.issues.filter((issue: IssueItem) => issue.id === id)[0])
+                    })
             })
     }, [thisIssueData])
     return (

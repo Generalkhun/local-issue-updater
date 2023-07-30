@@ -78,9 +78,13 @@ const Page = () => {
       // save form data to google sheet
       await axios.post("/api/saveForm", completedSaveForm);
       router.push('/admin-cms-page');
-
-      const res = await axios.get("/api/getIssuesData");
-      initializeIssuesSheetData(res.data.issues);
+      fetch("/api/getIssuesData", { cache: 'no-store' })
+      .then(res => {
+          res.json()
+              .then(res => {
+                  initializeIssuesSheetData(res.issues)
+              })
+      })
     } catch (error) {
       console.error("Error saving form:", error);
     } finally {

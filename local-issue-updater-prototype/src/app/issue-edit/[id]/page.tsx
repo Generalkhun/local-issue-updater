@@ -1,5 +1,5 @@
 'use client'
-import { OutputImgObject, getGGDriveImgURLViewWithId, getlocalISOTime, saveImgToGGDrive } from '@/app/utils/uiHelper'
+import { getGGDriveImgURLViewWithId, getlocalISOTime, saveImgToGGDrive } from '@/app/utils/uiHelper'
 import IssueForm from '@/component/IssueForm'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
 import useInputImageAreaForm from '@/hooks/useInputImageAreaForm'
@@ -69,10 +69,12 @@ const Page = ({ params }: Props) => {
                 .post("/api/updateIssueData", completedSaveForm)
                 .then(_ => {
                     router.push('/admin-cms-page')
-                    axios
-                        .get("/api/getIssuesData")
+                    fetch("/api/getIssuesData", { cache: 'no-store' })
                         .then(res => {
-                            initializeIssuesSheetData(res.data.issues)
+                            res.json()
+                                .then(res => {
+                                    initializeIssuesSheetData(res.issues)
+                                })
                         })
                 })
                 .catch(err => {

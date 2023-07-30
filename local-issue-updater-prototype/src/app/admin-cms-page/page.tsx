@@ -12,18 +12,20 @@ const AdminCMSPage = () => {
   const onAddNewIssue = () => {
     router.push('/issue-add')
   }
-  const {initializeIssuesSheetData, issuesData} = useContext(GoogleSheetDataContext)
+  const { initializeIssuesSheetData, issuesData } = useContext(GoogleSheetDataContext)
   // get from api
   useEffect(() => {
-    if(issuesData.length) {
+    if (issuesData.length) {
       return;
     }
-    axios
-      .get("/api/getIssuesData")
+    fetch("/api/getIssuesData", { cache: 'no-store' })
       .then(res => {
-        initializeIssuesSheetData(res.data.issues)
+        res.json()
+          .then(res => {
+            initializeIssuesSheetData(res.issues)
+          })
       })
-  },[issuesData])
+  }, [issuesData])
   return (
     <div>
       <h1> ปัญหาทั้งหมด</h1>

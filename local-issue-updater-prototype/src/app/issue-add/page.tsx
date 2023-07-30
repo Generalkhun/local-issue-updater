@@ -43,7 +43,7 @@ const Page = () => {
     const localISOTime = getlocalISOTime()
     // save img(s) to drive
     let imgInfoPromises: any = [];
-    if (areaImages.length) {
+    if (!isEmpty(areaImages)) {
       // make this wait until this code is complete befor saving data to ggsheet
       Object.keys(areaImages).forEach((area: string) => {
         areaImages[area].forEach((file: File, idx) => {
@@ -66,13 +66,13 @@ const Page = () => {
     }
 
     try {
-      const imgsInfoResolved = areaImages.length ? await Promise.all(imgInfoPromises) : "";
+      const imgsInfoResolved = !isEmpty(areaImages) ? await Promise.all(imgInfoPromises) : "";
       const completedSaveForm: IssueItem = {
         id: generatedIssueId,
         ...formData,
         datetimeReport: localISOTime,
         latestDatetimeUpdate: localISOTime,
-        imgsInfo: areaImages.length ? JSON.stringify(imgsInfoResolved) : "",
+        imgsInfo: !isEmpty(areaImages) ? JSON.stringify(imgsInfoResolved) : "",
       };
 
       // save form data to google sheet

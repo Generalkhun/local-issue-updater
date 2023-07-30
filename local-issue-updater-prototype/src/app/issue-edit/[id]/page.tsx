@@ -5,6 +5,7 @@ import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProv
 import useInputImageAreaForm from '@/hooks/useInputImageAreaForm'
 import { IssueItem } from '@/types'
 import axios from 'axios'
+import { isEmpty } from 'lodash'
 import { useRouter } from 'next/navigation'
 import React, { useContext, useState } from 'react'
 import { useCallback } from 'react'
@@ -34,7 +35,7 @@ const Page = ({ params }: Props) => {
         setIsSaving(true);
         // save new img(s) to drive (deleted image will disappear from the list already)
         let imgInfoPromises: any = [];
-        if (areaImages.length) {
+        if (!isEmpty(areaImages)) {
             // make this wait until this code is complete befor saving data to ggsheet
             Object.keys(areaImages).forEach((area: string) => {
                 areaImages[area].forEach((file: File, idx) => {

@@ -1,10 +1,10 @@
 import { google } from "googleapis";
-import type { NextApiResponse } from "next";
 import { get } from "lodash";
 import { getGoogleDriveAuthConfig } from "@/app/utils/apiHelper";
 import fs from 'fs'
 import path from "path";
 import { NextResponse } from "next/server";
+//import { LOCAL_ENV } from "../../../../secrets/localEnvVars";
 
 // Function to save a File object to a given directory.
 const saveFileToDirectory = async (file: File, targetDirectory: string): Promise<string> => {
@@ -53,6 +53,8 @@ async function uploadFile(file: File) {
                     name: file.name,
                     mimeType: file.type,
                     parents:[process.env.GGDRIVE_FOLDER || ""],
+                    /**@localdevelopment */
+                    //parents:[LOCAL_ENV.GGDRIVE_FOLDER || ""],
                 },
             }
         )
@@ -63,7 +65,7 @@ async function uploadFile(file: File) {
     }
 
 }
-export async function POST(req: any, res: NextApiResponse) {
+export async function POST(req: any) {
     const formData = await req.formData();
     const file = formData.get('file');
     const savedFile = await uploadFile(file)

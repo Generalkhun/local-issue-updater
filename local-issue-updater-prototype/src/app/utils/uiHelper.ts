@@ -50,7 +50,6 @@ export interface OutputImgObject {
 }
 
 export const extractIssueImageData = (imgsInfoParsed: any): OutputImgObject[] | [] => {
-    console.log("🚀 ~ file: uiHelper.ts:53 ~ extractIssueImageData ~ imgsInfoParsed:", imgsInfoParsed)
     if(isEmpty(imgsInfoParsed)) {
         return []
     }

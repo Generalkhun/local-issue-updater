@@ -27,12 +27,27 @@ const AdminCMSPage = () => {
       })
   }, [issuesData])
   return (
-    <div>
-      <h1> ปัญหาทั้งหมด</h1>
-      <div>
-        ----------------
-
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
+      <div style={{
+        width: '375px',
+        height: '51px',
+        backgroundColor: '#F07B3A',
+        fontWeight: 500,
+        fontSize: '22px'
+      }}>
+        ปัญหาทั้งหมด
+      </div>
+      <div style={{
+        paddingTop: '20px',
+      }}>
         <IssueListContainer />
+      </div>
+      <div>
         <div title="add new issue" style={{
           position: 'absolute',
           bottom: '50px',

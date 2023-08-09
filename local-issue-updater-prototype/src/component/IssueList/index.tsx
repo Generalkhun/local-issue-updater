@@ -4,6 +4,7 @@ import React, { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { InputImgObject, extractIssueImageData, getIssueStatusColor, severityMapper } from '@/app/utils/uiHelper';
 import { findIndex } from 'lodash';
+import HamburgerMenu from '../Hamburgermenu';
 
 type Props = {
     issues: IssueItem[]
@@ -20,7 +21,7 @@ const IssueList = ({ issues }: Props) => {
 
     return (
         <div style={{
-            paddingTop: '222px',
+            paddingTop: '170px',
         }}>
             {issues && <div>
                 {
@@ -42,7 +43,7 @@ const IssueList = ({ issues }: Props) => {
                             <div key={idx} style={{
                                 height: '103px',
                                 width: '372px',
-                                overflow: 'scroll',
+                                overflow: 'visible',
                                 marginTop: '10px',
                                 padding: '8px',
                                 boxShadow: '0px 1px 8px 0px rgba(0, 0, 0, 0.12)',
@@ -126,9 +127,10 @@ const IssueList = ({ issues }: Props) => {
                                             <div>ความเร่งด่วน: {issue.severity}</div> */}
                                         </div>
                                         <div>
+                                        <HamburgerMenu />
                                             {/* <div style={{
                                                 display: 'flex',
-                                                gap: '4px',
+                                                gap: '2px',
                                                 flexDirection: 'column',
                                             }}>
                                                 <button onClick={onClickShare}>คัดลอกลิ้ง</button>

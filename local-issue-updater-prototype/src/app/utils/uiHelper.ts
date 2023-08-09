@@ -50,7 +50,7 @@ export interface OutputImgObject {
 }
 
 export const extractIssueImageData = (imgsInfoParsed: any): OutputImgObject[] | [] => {
-    if(isEmpty(imgsInfoParsed)) {
+    if (isEmpty(imgsInfoParsed)) {
         return []
     }
     const outputArray: OutputImgObject[] = imgsInfoParsed.map((item: InputImgObject) => {
@@ -63,4 +63,39 @@ export const extractIssueImageData = (imgsInfoParsed: any): OutputImgObject[] | 
         };
     });
     return outputArray;
+}
+
+export const getIssueStatusColor = (status: string) => {
+    // <option value="รับเรื่องปัญหา">รับเรื่องปัญหา</option>
+    // <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+    // <option value="ดำเนินการเรียบร้อย">ดำเนินการเรียบร้อย</option>
+    // <option value="นอกเขตพื้นที่">นอกเขตพื้นที่</option>
+    // <option value="ที่ส่วนบุคคล">ที่ส่วนบุคคล</option>
+    switch (status) {
+        case "รับเรื่องปัญหา":
+            return "#CDCDCD"
+        case "กำลังดำเนินการ":
+            return "#F6B14A"
+        case "ดำเนินการเรียบร้อย":
+            return "#79D741"
+        case "นอกเขตพื้นที่":
+            return "black"
+        case "ที่ส่วนบุคคล":
+            return "blue"
+    }
+}
+
+export const severityMapper = (severity: string) => {
+    switch (severity) {
+        case 'วิกฤติ':
+            return 'red'
+        case 'ด่วน':
+            return 'orange'
+        case 'ปานกลาง':
+            return 'yellow'
+        case 'รอได้':
+            return 'grey'
+        default:
+            return 'grey'
+    }
 }

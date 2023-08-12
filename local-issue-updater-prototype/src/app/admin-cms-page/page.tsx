@@ -55,7 +55,7 @@ const AdminCMSPage = () => {
         }}>
           <button onClick={onAddNewIssue} style={{
             width: '57px',
-            height: '57px',
+            height: '53px',
             borderRadius: '50%',
             fontSize: '50px',
             backgroundColor: '#F07B3A',

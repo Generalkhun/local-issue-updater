@@ -9,14 +9,20 @@ export interface Option {
 interface HamburgerMenuProps {
     options: Option[],
     issue: IssueItem,
+    onClose: () => void,
 }
-const HamburgerMenu = ({ options, issue }: HamburgerMenuProps) => {
+const HamburgerMenu = ({ options, issue, onClose }: HamburgerMenuProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null); // Create a ref for the menu container
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
+    useEffect(() => {
+        if (!isOpen) {
+            onClose();
+        }
+    }, [isOpen])
 
     useEffect(() => {
         // Add event listener to listen for clicks on the document
@@ -37,7 +43,11 @@ const HamburgerMenu = ({ options, issue }: HamburgerMenuProps) => {
     return (
         <div className={`hamburger-menu ${isOpen ? 'open' : ''}`} ref={menuRef}>
             <button className="menu-toggle" onClick={toggleMenu}>
-                ...
+                <svg xmlns="http://www.w3.org/2000/svg" width="3" height="12" viewBox="0 0 3 12" fill="none">
+                    <ellipse cx="1.45914" cy="1.38462" rx="1.45914" ry="1.38462" fill="#4F4F4F" />
+                    <ellipse cx="1.45914" cy="6.00009" rx="1.45914" ry="1.38462" fill="#4F4F4F" />
+                    <ellipse cx="1.45914" cy="10.6153" rx="1.45914" ry="1.38462" fill="#4F4F4F" />
+                </svg>
             </button>
             {isOpen && (
                 <div className="menu-options">

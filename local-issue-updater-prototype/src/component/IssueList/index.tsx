@@ -1,9 +1,8 @@
 'use client';
 import { IssueItem } from '@/types'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { InputImgObject, extractIssueImageData, getIssueStatusColor, severityMapper } from '@/app/utils/uiHelper';
-import { findIndex } from 'lodash';
+import { extractIssueImageData, getIssueStatusColor } from '@/app/utils/uiHelper';
 import HamburgerMenu, { Option } from '../Hamburgermenu';
 
 type Props = {
@@ -20,15 +19,19 @@ const IssueList = ({ issues }: Props) => {
                 : '';
 
         const URL = `${origin}${pathName}`;
-        navigator.clipboard.writeText(URL.replace('admin-cms-page','')+`issue-preview/${id}`)
+        navigator.clipboard.writeText(URL.replace('admin-cms-page', '') + `issue-preview/${id}`)
     }
     const onClickDetail = (id: string) => {
         router.push(`/issue-detail/${id}`)
     }
+    const [isCopied, setIsCopied] = useState(false);
     const options: Option[] = useMemo(() => ([
         {
-            name: "คัดลอกลิ้ง",
-            callback: (issue: IssueItem) => onClickShare(issue.id),
+            name: `${isCopied ? "✅ " : ""}คัดลอกลิ้ง`,
+            callback: (issue: IssueItem) => {
+                onClickShare(issue.id)
+                setIsCopied(true)
+            },
         },
         {
             name: "รายละเอียด",
@@ -42,8 +45,10 @@ const IssueList = ({ issues }: Props) => {
             name: "พรีวิว",
             callback: (issue: IssueItem) => router.push(`/issue-preview/${issue.id}`),
         }
-    ]), [])
-
+    ]), [onClickShare, setIsCopied, isCopied])
+    const onCloseHanburgerMenu = useCallback(() => {
+        setIsCopied(false)
+    }, [setIsCopied])
     return (
         <div style={{
             paddingTop: '170px',
@@ -89,9 +94,9 @@ const IssueList = ({ issues }: Props) => {
                                     <div style={{
                                         display: 'flex',
                                         justifyContent: 'space-between',
+                                        gap: '40px',
                                     }}>
                                         <div>
-                                            {/* <div>วันที่แจ้ง {issue.datetimeReport}</div> */}
                                             <div style={{
                                                 display: 'flex',
                                                 flexDirection: 'row',
@@ -147,22 +152,9 @@ const IssueList = ({ issues }: Props) => {
                                                 <div>ประเภท: {issue.type}</div>
                                                 <div style={{ paddingTop: '2px' }}>{issue.datetimeReport.slice(0, issue.datetimeReport.indexOf(" "))}</div>
                                             </div>
-                                            {/* <div>ประเภท: {issue.type}</div>
-                                            <div>สถานะ: {issue.status}</div>
-                                            <div>ความเร่งด่วน: {issue.severity}</div> */}
                                         </div>
                                         <div>
-                                            <HamburgerMenu issue={issue} options={options} />
-                                            {/* <div style={{
-                                                display: 'flex',
-                                                gap: '2px',
-                                                flexDirection: 'column',
-                                            }}>
-                                                <button onClick={onClickShare}>คัดลอกลิ้ง</button>
-                                                <button onClick={() => onClickDetail(issue.id)}>รายละเอียด</button>
-                                                <button onClick={() => router.push(`/issue-edit/${issue.id}`)}>แก้ไข</button>
-                                                <button onClick={() => router.push(`/issue-preview/${issue.id}`)}>พรีวิว</button>
-                                            </div> */}
+                                            <HamburgerMenu issue={issue} options={options} onClose={onCloseHanburgerMenu} />
                                         </div>
                                     </div>
                                 </div>

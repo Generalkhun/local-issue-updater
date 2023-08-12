@@ -17,7 +17,8 @@
   
   .menu-options {
     position: absolute;
-    right: -85px;
+    right: -100px;
+    top: 4px;
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 10px;

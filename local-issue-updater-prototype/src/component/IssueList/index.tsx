@@ -1,10 +1,10 @@
 'use client';
 import { IssueItem } from '@/types'
 import React, { useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { InputImgObject, extractIssueImageData, getIssueStatusColor, severityMapper } from '@/app/utils/uiHelper';
 import { findIndex } from 'lodash';
-import HamburgerMenu from '../Hamburgermenu';
+import HamburgerMenu, { Option } from '../Hamburgermenu';
 
 type Props = {
     issues: IssueItem[]
@@ -12,12 +12,37 @@ type Props = {
 
 const IssueList = ({ issues }: Props) => {
     const router = useRouter()
-    const onClickShare = () => {
-        console.log('share')
+    const pathName = usePathname()
+    const onClickShare = (id: string) => {
+        const origin =
+            typeof window !== 'undefined' && window.location.origin
+                ? window.location.origin
+                : '';
+
+        const URL = `${origin}${pathName}`;
+        navigator.clipboard.writeText(URL.replace('admin-cms-page','')+`issue-preview/${id}`)
     }
     const onClickDetail = (id: string) => {
         router.push(`/issue-detail/${id}`)
     }
+    const options: Option[] = useMemo(() => ([
+        {
+            name: "คัดลอกลิ้ง",
+            callback: (issue: IssueItem) => onClickShare(issue.id),
+        },
+        {
+            name: "รายละเอียด",
+            callback: (issue: IssueItem) => onClickDetail(issue.id),
+        },
+        {
+            name: "แก้ไข",
+            callback: (issue: IssueItem) => router.push(`/issue-edit/${issue.id}`),
+        },
+        {
+            name: "พรีวิว",
+            callback: (issue: IssueItem) => router.push(`/issue-preview/${issue.id}`),
+        }
+    ]), [])
 
     return (
         <div style={{
@@ -120,14 +145,14 @@ const IssueList = ({ issues }: Props) => {
                                                 paddingTop: '50px'
                                             }}>
                                                 <div>ประเภท: {issue.type}</div>
-                                                <div style={{paddingTop: '2px'}}>{issue.datetimeReport.slice(0,issue.datetimeReport.indexOf(" "))}</div>
+                                                <div style={{ paddingTop: '2px' }}>{issue.datetimeReport.slice(0, issue.datetimeReport.indexOf(" "))}</div>
                                             </div>
                                             {/* <div>ประเภท: {issue.type}</div>
                                             <div>สถานะ: {issue.status}</div>
                                             <div>ความเร่งด่วน: {issue.severity}</div> */}
                                         </div>
                                         <div>
-                                        <HamburgerMenu />
+                                            <HamburgerMenu issue={issue} options={options} />
                                             {/* <div style={{
                                                 display: 'flex',
                                                 gap: '2px',

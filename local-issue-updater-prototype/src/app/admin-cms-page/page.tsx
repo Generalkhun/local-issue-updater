@@ -50,12 +50,12 @@ const AdminCMSPage = () => {
       <div>
         <div title="เพิ่มปัญหาใหม่" style={{
           position: 'fixed',
-          bottom: '50px',
-          right: '100px',
+          bottom: '16px',
+          right: '16px',
         }}>
           <button onClick={onAddNewIssue} style={{
-            width: '100px',
-            height: '100px',
+            width: '57px',
+            height: '57px',
             borderRadius: '50%',
             fontSize: '50px',
             backgroundColor: '#F07B3A',

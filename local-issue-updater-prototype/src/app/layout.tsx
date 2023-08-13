@@ -15,7 +15,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body style={{
+        margin: '0px'
+      }} className={inter.className}>
         <GoogleSheetDataProvider>
           {children}
         </GoogleSheetDataProvider>

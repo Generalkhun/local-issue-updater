@@ -5,13 +5,13 @@ import { includes } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react'
 
 interface SaveFormOption {
-    updatedImgsOnServer: {url: string; name: string}[] | [],
+    updatedImgsOnServer: { url: string; name: string }[] | [],
 }
 type Props = {
     areaImages: Record<string, File[]>
     handleAreaImageChange: (event: React.ChangeEvent<HTMLInputElement>, areaName: string) => void;
     handleDeleteAreaImage: (areaName: string, idx: number) => void;
-    onSaveForm: (option? : SaveFormOption) => void
+    onSaveForm: (option?: SaveFormOption) => void
     onFormDataChange: (updatedFormData: Record<any, any>) => void;
     isEditMode?: boolean;
     prefillFormData?: IssueItem;
@@ -28,18 +28,18 @@ const IssueForm = ({
     isSaving,
 }: Props) => {
     //todo: use id to prefill id the form is editing form
-    const [status, setStatus] = useState(isEditMode ? prefillFormData?.status : "รับเรื่องปัญหา");
+    const [status, setStatus] = useState(isEditMode ? prefillFormData?.status : "");
     const [issueDetail, setIssueDetail] = useState("");
-    const [type, setType] = useState(isEditMode ? prefillFormData?.type : "ถนน");
-    const [area, setArea] = useState(isEditMode ? prefillFormData?.area : "จอมทอง");
+    const [type, setType] = useState(isEditMode ? prefillFormData?.type : "");
+    const [area, setArea] = useState(isEditMode ? prefillFormData?.area : "");
     const [reporterName, setReporterName] = useState("");
     const [reporterPhoneNumber, setReporterPhoneNumber] = useState("");
     const [ps, setPs] = useState("");
     const [severity, setSeverity] = useState(isEditMode ? prefillFormData?.severity : "วิกฤติ");
-    const imgsInfoParsed: InputImgObject[] = useMemo(() => prefillFormData?.imgsInfo ? JSON.parse(prefillFormData.imgsInfo) : [],[prefillFormData])
+    const imgsInfoParsed: InputImgObject[] = useMemo(() => prefillFormData?.imgsInfo ? JSON.parse(prefillFormData.imgsInfo) : [], [prefillFormData])
     const imgsInfoDisplay = useMemo(() => imgsInfoParsed ? extractIssueImageData(imgsInfoParsed) : [], [extractIssueImageData, imgsInfoParsed])
     const [displayedImagesThatSavedOnServer, updateDisplayedImagesThatSavedOnServer] = useState(isEditMode ? imgsInfoDisplay : [])
-    const [updatedImgsOnServer, setUpdatedImgsOnServer] = useState<{url: string, name: string}[] | []>(imgsInfoParsed);
+    const [updatedImgsOnServer, setUpdatedImgsOnServer] = useState<{ url: string, name: string }[] | []>(imgsInfoParsed);
 
     // prefill everything if it is edit mode
     useEffect(() => {
@@ -119,7 +119,7 @@ const IssueForm = ({
                 prev.filter(imgObj => updatedUrls.includes(imgObj.url))
             )
         )
-    },[displayedImagesThatSavedOnServer,setUpdatedImgsOnServer])
+    }, [displayedImagesThatSavedOnServer, setUpdatedImgsOnServer])
 
     const handleDeleteSavedImage = (imgUrl: string) => {
         if (!imgsInfoDisplay.length) {
@@ -138,14 +138,25 @@ const IssueForm = ({
         onSaveForm({
             updatedImgsOnServer,
         });
-        
+
     }
 
     return (
-        <div>
-            <div>
-                <label htmlFor='status'>สถานะปัญหา</label>
-                <select value={status} onChange={(e) => setStatus(e.target.value)} id='status' placeholder=''>
+        <div style={{
+            padding: '11px',
+            color: '#4F4F4F',
+            fontSize: '16px',
+        }}>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '5px'
+            }}>
+                <label htmlFor='status'>สถานะ*</label>
+                <select value={status} onChange={(e) => setStatus(e.target.value)} id='status'>
+                    <option disabled={true} value="">
+                        -- select --
+                    </option>
                     <option value="รับเรื่องปัญหา">รับเรื่องปัญหา</option>
                     <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
                     <option value="ดำเนินการเรียบร้อย">ดำเนินการเรียบร้อย</option>
@@ -153,13 +164,26 @@ const IssueForm = ({
                     <option value="ที่ส่วนบุคคล">ที่ส่วนบุคคล</option>
                 </select>
             </div>
-            <div>
-                <label htmlFor='detail'>รายละเอียด</label>
-                <input value={issueDetail} onChange={(e) => setIssueDetail(e.target.value)} type='text' id='detail' placeholder='' />
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                marginTop: '20px',
+                gap: '5px'
+            }}>
+                <label htmlFor='detail'>รายละเอียดปัญหา*</label>
+                <textarea style={{ height: '100px' }} value={issueDetail} onChange={(e) => setIssueDetail(e.target.value)} id='detail' placeholder='' />
             </div>
-            <div>
-                <label htmlFor='type'>ประเภทปัญหา</label>
-                <select value={type} onChange={(e) => setType(e.target.value)} id='type' placeholder=''>
+            <div style={{
+                marginTop: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '5px'
+            }}>
+                <label htmlFor='type'>ประเภทปัญหา*</label>
+                <select value={type} onChange={(e) => setType(e.target.value)} id='type'>
+                    <option disabled={true} value="">
+                        -- select --
+                    </option>
                     <option value="ถนน">ถนน</option>
                     <option value="ทางเท้า">ทางเท้า</option>
                     <option value="แสงสว่าง">แสงสว่าง</option>
@@ -191,8 +215,13 @@ const IssueForm = ({
                     <option value="สวนสาธารณะ">สวนสาธารณะ</option>
                 </select>
             </div>
-            <div>
-                <label htmlFor='area'>แขวงที่เกิดปัญหา</label>
+            <div style={{
+                marginTop: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '5px'
+            }}>
+                <label htmlFor='area'>แขวงที่เกิดปัญหา*</label>
                 <select value={area} onChange={(e) => setArea(e.target.value)} id='area' placeholder=''>
                     <option value="จอมทอง">จอมทอง</option>
                     <option value="บางค้อ">บางค้อ</option>
@@ -200,21 +229,32 @@ const IssueForm = ({
                     <option value="ท่าข้าม">ท่าข้าม</option>
                 </select>
             </div>
-            <div>
+            <div style={{
+                marginTop: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '5px'
+            }}>
                 <label htmlFor='reporterName'>ชื่อผู้รายงาน(ถ้ามี)</label>
                 <input value={reporterName} onChange={(e) => setReporterName(e.target.value)} type='text' id='reporterName' placeholder='' />
             </div>
-            <div>
+            <div style={{
+                marginTop: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '5px'
+            }}>
                 <label htmlFor='reporterPhoneNum'>เบอร์โทรศัพท์ผู้รายงาน(ถ้ามี)</label>
                 <input value={reporterPhoneNumber} onChange={(e) => setReporterPhoneNumber(e.target.value)} type='text' id='reporterPhoneNum' placeholder='' />
             </div>
             <div style={{
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                marginTop: '20px',
+                gap: '5px',
             }}>
                 <label htmlFor='ps'>หมายเหตุ</label>
                 <textarea style={{
-                    width: '400px',
                     height: '100px'
                 }} value={ps} onChange={(e) => setPs(e.target.value)} id='ps' placeholder='' />
                 <label htmlFor='ps'>ภาพประกอบหมายเหตุ</label>
@@ -231,8 +271,10 @@ const IssueForm = ({
                                 X
                             </button>
                         </div>
-                    ))}
-                {displayedImagesThatSavedOnServer.length && displayedImagesThatSavedOnServer
+                    ))
+                }
+
+                {displayedImagesThatSavedOnServer.length ? displayedImagesThatSavedOnServer
                     .filter(imgInfo => imgInfo.group === 'ps')
                     .map((imgInfoPS, idx) => <div key={idx}>
                         <img width='200px' src={imgInfoPS.url} />
@@ -240,10 +282,17 @@ const IssueForm = ({
                             X
                         </button>
                     </div>)
+                    :
+                    <></>
                 }
             </div>
-            <div>
-                <label htmlFor='severity'>ความเร่งด่วน</label>
+            <div style={{
+                marginTop: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '5px'
+            }}>
+                <label htmlFor='severity'>ความเร่งด่วน*</label>
                 <select value={severity} onChange={(e) => {
                     setSeverity(e.target.value)
                 }} id='severity' placeholder=''>
@@ -254,8 +303,13 @@ const IssueForm = ({
                 </select>
             </div>
             <h2>ภาพประกอบ</h2>
-            <div>
-                <p>ก่อนแก้ไข</p>
+            <div style={{
+                marginTop: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '5px'
+            }}>
+                รูปก่อนแก้ไข
                 <input
                     type="file"
                     accept="image/*"
@@ -270,7 +324,7 @@ const IssueForm = ({
                             </button>
                         </div>
                     ))}
-                {displayedImagesThatSavedOnServer.length && displayedImagesThatSavedOnServer
+                {displayedImagesThatSavedOnServer.length ? displayedImagesThatSavedOnServer
                     .filter(imgInfo => imgInfo.group === 'before')
                     .map((imgInfoPS, idx) => <div key={idx}>
                         <img width='200px' src={imgInfoPS.url} />
@@ -278,10 +332,17 @@ const IssueForm = ({
                             X
                         </button>
                     </div>)
+                    :
+                    <></>
                 }
             </div>
-            <div>
-                <p>หลังแก้ไข</p>
+            <div style={{
+                marginTop: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '5px'
+            }}>
+                รูปหลังแก้ไข
                 <input
                     type="file"
                     accept="image/*"
@@ -296,7 +357,7 @@ const IssueForm = ({
                             </button>
                         </div>
                     ))}
-                {displayedImagesThatSavedOnServer.length && displayedImagesThatSavedOnServer
+                {displayedImagesThatSavedOnServer.length ? displayedImagesThatSavedOnServer
                     .filter(imgInfo => imgInfo.group === 'after')
                     .map((imgInfoPS, idx) => <div key={idx}>
                         <img width='200px' src={imgInfoPS.url} />
@@ -304,6 +365,8 @@ const IssueForm = ({
                             X
                         </button>
                     </div>)
+                    :
+                    <></>
                 }
             </div>
             {isSaving ? <div style={{
@@ -316,12 +379,15 @@ const IssueForm = ({
             }}>
                 กำลังบันทึก...
             </div> : <button onClick={saveIssueForm} style={{
-                width: '400px',
+                width: '347px',
                 height: '80px',
                 marginTop: '20px',
-                borderRadius: '8px',
-                backgroundColor: 'crimson',
-                fontSize: '30px',
+                backgroundColor: '#F07B3A',
+                fontSize: '28px',
+                fontWeight: 600,
+                color: 'white',
+                borderRadius: '60px',
+                borderStyle: 'none'
             }}>บันทึก</button>}
         </div>
     )

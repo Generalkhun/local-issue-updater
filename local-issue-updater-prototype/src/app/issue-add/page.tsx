@@ -79,12 +79,12 @@ const Page = () => {
       await axios.post("/api/saveForm", completedSaveForm);
       router.push('/admin-cms-page');
       fetch("/api/getIssuesData", { cache: 'no-store' })
-      .then(res => {
+        .then(res => {
           res.json()
-              .then(res => {
-                  initializeIssuesSheetData(res.issues)
-              })
-      })
+            .then(res => {
+              initializeIssuesSheetData(res.issues)
+            })
+        })
     } catch (error) {
       console.error("Error saving form:", error);
     } finally {
@@ -92,20 +92,51 @@ const Page = () => {
     }
   };
 
-  return <div>
-    <div>
-      <button onClick={onClickCancel}>ยกเลิก</button>
-      <h1>เพิ่มปัญหาใหม่ (id: {generatedIssueId})</h1>
+  return <div style={{
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }}>
+    <div style={{
+      backgroundColor: "#F07B3A",
+      width: '100%',
+      height: '64px',
+      fontSize: '22px',
+      fontWeight: 500,
+      paddingLeft: '20px',
+      color: 'white',
+    }}>
+      <div style={{
+        paddingTop: '15px'
+      }}>
+        <button style={{
+          backgroundColor: 'transparent',
+          borderStyle: 'none',
+          fontWeight: 800,
+          fontSize: '12px',
+          color: 'black'
+        }} onClick={onClickCancel}>{"< ยกเลิก"}</button>
+        <span>เพิ่มปัญหาใหม่</span>
+      </div>
     </div>
-    <IssueForm
-      areaImages={areaImages}
-      handleAreaImageChange={handleAreaImageChange}
-      handleDeleteAreaImage={handleDeleteAreaImage}
-      onFormDataChange={onFormDataChange}
-      onSaveForm={onSaveAddForm}
-      isSaving={isSaving}
+    <div style={{ 
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      }}>
+      <IssueForm
+        areaImages={areaImages}
+        handleAreaImageChange={handleAreaImageChange}
+        handleDeleteAreaImage={handleDeleteAreaImage}
+        onFormDataChange={onFormDataChange}
+        onSaveForm={onSaveAddForm}
+        isSaving={isSaving}
+      />
+    </div>
 
-    />
   </div>
 }
 

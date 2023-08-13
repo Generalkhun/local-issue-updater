@@ -55,7 +55,7 @@ const AdminCMSPage = () => {
       </div>
       <div style={{
         position: 'absolute',
-        top: '5px',
+        top: '-3px',
         right: '50%',
         marginRight: '-188px'
       }}>
@@ -71,7 +71,7 @@ const AdminCMSPage = () => {
       {!isLoading && <>
         <div style={{
           position: 'absolute',
-          top: '146px',
+          top: '139px',
           right: '50%',
           marginRight: '-178px'
         }}>
@@ -86,7 +86,7 @@ const AdminCMSPage = () => {
         </div>
         <div style={{
           position: 'absolute',
-          top: '146px',
+          top: '139px',
           right: '50%',
           marginRight: '-60px'
         }}>
@@ -134,7 +134,7 @@ const AdminCMSPage = () => {
           fontFamily: 'Anakotmai',
           fontStyle: 'normal',
         }}>
-          {isLoading ? 'กำลังโหลด...' : `คุณแก้ปัญหาไปแล้ว ${numbersOfCompletedIssues}/${issuesData.length} สู้ต่อไป✌️`}
+          {isLoading ? '' : `คุณแก้ปัญหาไปแล้ว ${numbersOfCompletedIssues}/${issuesData.length} สู้ต่อไป✌️`}
         </div>
         <div style={{
           fontWeight: 500,

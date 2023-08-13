@@ -42,7 +42,8 @@ const AdminCMSPage = () => {
       <div style={{
         position: 'absolute',
         top: '76px',
-        right: '122px',
+        right: '50%',
+        marginRight: '-188px'
       }}>
         <Image
           src="/mfp-logo.svg"
@@ -55,7 +56,8 @@ const AdminCMSPage = () => {
       <div style={{
         position: 'absolute',
         top: '5px',
-        right: '122px',
+        right: '50%',
+        marginRight: '-188px'
       }}>
         <Image
           src="/puat-removebg-preview.svg"
@@ -70,7 +72,8 @@ const AdminCMSPage = () => {
         <div style={{
           position: 'absolute',
           top: '146px',
-          right: '249px',
+          right: '50%',
+          marginRight: '-178px'
         }}>
           <button disabled style={{
             width: '112px',
@@ -84,7 +87,8 @@ const AdminCMSPage = () => {
         <div style={{
           position: 'absolute',
           top: '146px',
-          right: '131px',
+          right: '50%',
+          marginRight: '-60px'
         }}>
           <button disabled style={{
             width: '112px',

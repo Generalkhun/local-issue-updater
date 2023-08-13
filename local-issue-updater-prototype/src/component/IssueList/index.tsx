@@ -2,7 +2,7 @@
 import { IssueItem } from '@/types'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { extractIssueImageData, getIssueStatusColor } from '@/app/utils/uiHelper';
+import { extractIssueImageData, getIssueStatusColor, severityMapper } from '@/app/utils/uiHelper';
 import HamburgerMenu, { Option } from '../Hamburgermenu';
 
 type Props = {
@@ -87,7 +87,7 @@ const IssueList = ({ issues }: Props) => {
                                         width: '98px',
                                         height: '74px',
                                     }}>
-                                        <img width='100px' height='auto' src={shownImg} />
+                                        {shownImg ? <img width='100px' height='auto' src={shownImg} /> : <div style={{ width: '100px'}}></div>}
                                     </div>
 
                                     <div style={{
@@ -104,8 +104,7 @@ const IssueList = ({ issues }: Props) => {
                                                 <div style={{
                                                     width: '55px',
                                                     height: '20px',
-                                                    /**@todo change color according to serverity */
-                                                    backgroundColor: '#D41010',
+                                                    backgroundColor: severityMapper(issue.severity),
                                                     color: 'white',
                                                     fontFamily: 'Heebo',
                                                     fontSize: '12px',
@@ -133,6 +132,8 @@ const IssueList = ({ issues }: Props) => {
                                             <div style={{
                                                 fontWeight: 500,
                                                 fontSize: '14px',
+                                                overflow: 'scroll',
+                                                width: '200px',
                                             }}>{issue.issueDetail}</div>
                                             <div>
 

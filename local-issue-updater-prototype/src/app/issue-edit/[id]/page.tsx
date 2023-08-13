@@ -86,19 +86,60 @@ const Page = ({ params }: Props) => {
 
 
     }
-    return <div>
-        <h1>แก้ไขข้อมูล ปัญหารหัส: {id}</h1>
-        <IssueForm
-            areaImages={areaImages}
-            handleAreaImageChange={handleAreaImageChange}
-            handleDeleteAreaImage={handleDeleteAreaImage}
-            prefillFormData={formData}
-            isEditMode={true}
-            onFormDataChange={onFormDataChange}
-            onSaveForm={onSaveEditForm}
-            isSaving={isSaving}
-        />
+    const onClickCancel = () => {
+        router.push('/admin-cms-page')
+      }
+    return <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }}>
+        <div style={{
+            backgroundColor: "#F07B3A",
+            width: '100%',
+            height: '64px',
+            fontSize: '22px',
+            fontWeight: 500,
+            paddingLeft: '20px',
+            color: 'white',
+        }}>
+            <div style={{
+                paddingTop: '15px'
+            }}>
+                <button style={{
+                    backgroundColor: 'transparent',
+                    borderStyle: 'none',
+                    fontWeight: 800,
+                    fontSize: '12px',
+                    color: 'black'
+                }} onClick={onClickCancel}>{"< ยกเลิก"}</button>
+                <span>แก้ไขรหัสปัญหา</span>
+            </div>
+        </div>
+        <div style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+        }}>
+            <IssueForm
+                areaImages={areaImages}
+                handleAreaImageChange={handleAreaImageChange}
+                handleDeleteAreaImage={handleDeleteAreaImage}
+                prefillFormData={formData}
+                isEditMode={true}
+                onFormDataChange={onFormDataChange}
+                onSaveForm={onSaveEditForm}
+                isSaving={isSaving}
+            />
+        </div>
+
     </div>
+
+
+
 }
 
 export default Page

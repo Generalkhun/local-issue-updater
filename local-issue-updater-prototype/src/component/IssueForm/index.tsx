@@ -35,11 +35,12 @@ const IssueForm = ({
     const [reporterName, setReporterName] = useState("");
     const [reporterPhoneNumber, setReporterPhoneNumber] = useState("");
     const [ps, setPs] = useState("");
-    const [severity, setSeverity] = useState(isEditMode ? prefillFormData?.severity : "วิกฤติ");
+    const [severity, setSeverity] = useState(isEditMode ? prefillFormData?.severity : "");
     const imgsInfoParsed: InputImgObject[] = useMemo(() => prefillFormData?.imgsInfo ? JSON.parse(prefillFormData.imgsInfo) : [], [prefillFormData])
     const imgsInfoDisplay = useMemo(() => imgsInfoParsed ? extractIssueImageData(imgsInfoParsed) : [], [extractIssueImageData, imgsInfoParsed])
     const [displayedImagesThatSavedOnServer, updateDisplayedImagesThatSavedOnServer] = useState(isEditMode ? imgsInfoDisplay : [])
     const [updatedImgsOnServer, setUpdatedImgsOnServer] = useState<{ url: string, name: string }[] | []>(imgsInfoParsed);
+    const [isFormSubmitable, setIsFormSubmitable] = useState<boolean>(false)
 
     // prefill everything if it is edit mode
     useEffect(() => {
@@ -110,6 +111,15 @@ const IssueForm = ({
         }
         onFormDataChange({ severity })
     }, [severity, onFormDataChange])
+
+    //effect for enable form submition
+    useEffect(() => {
+        if (status && issueDetail && type && area && severity) {
+            setIsFormSubmitable(true)
+            return;
+        }
+        setIsFormSubmitable(false)
+    }, [status, issueDetail, type, area, severity])
 
     // update saved image
     useEffect(() => {
@@ -222,7 +232,10 @@ const IssueForm = ({
                 gap: '5px'
             }}>
                 <label htmlFor='area'>แขวงที่เกิดปัญหา*</label>
-                <select value={area} onChange={(e) => setArea(e.target.value)} id='area' placeholder=''>
+                <select value={area} onChange={(e) => setArea(e.target.value)} id='area' >
+                    <option disabled={true} value="">
+                        -- select --
+                    </option>
                     <option value="จอมทอง">จอมทอง</option>
                     <option value="บางค้อ">บางค้อ</option>
                     <option value="บางมด">บางมด</option>
@@ -267,8 +280,16 @@ const IssueForm = ({
                     areaImages['ps'].map((image, index) => (
                         <div key={index}>
                             <img width='200px' src={URL.createObjectURL(image)} alt="Preview" />
-                            <button onClick={() => handleDeleteAreaImage('ps', index)}>
-                                X
+                            <button style={{
+                                backgroundColor: '#D41010',
+                                color: 'white',
+                                borderRadius: '10px',
+                                borderStyle: 'none',
+                                marginLeft: '5px',
+                                marginBottom: '5px',
+                                height: '50px',
+                            }} onClick={() => handleDeleteAreaImage('ps', index)}>
+                                x ลบภาพ
                             </button>
                         </div>
                     ))
@@ -278,8 +299,16 @@ const IssueForm = ({
                     .filter(imgInfo => imgInfo.group === 'ps')
                     .map((imgInfoPS, idx) => <div key={idx}>
                         <img width='200px' src={imgInfoPS.url} />
-                        <button onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
-                            X
+                        <button style={{
+                                backgroundColor: '#D41010',
+                                color: 'white',
+                                borderRadius: '10px',
+                                borderStyle: 'none',
+                                marginLeft: '5px',
+                                marginBottom: '5px',
+                                height: '50px',
+                            }} onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
+                            x ลบภาพ
                         </button>
                     </div>)
                     :
@@ -296,6 +325,9 @@ const IssueForm = ({
                 <select value={severity} onChange={(e) => {
                     setSeverity(e.target.value)
                 }} id='severity' placeholder=''>
+                    <option disabled={true} value="">
+                        -- select --
+                    </option>
                     <option value="วิกฤติ">วิกฤติ</option>
                     <option value="ด่วน">ด่วน</option>
                     <option value="ปานกลาง">ปานกลาง</option>
@@ -319,8 +351,16 @@ const IssueForm = ({
                     areaImages['before'].map((image, index) => (
                         <div key={index}>
                             <img width='200px' src={URL.createObjectURL(image)} alt="Preview" />
-                            <button onClick={() => handleDeleteAreaImage('before', index)}>
-                                X
+                            <button style={{
+                                backgroundColor: '#D41010',
+                                color: 'white',
+                                borderRadius: '10px',
+                                borderStyle: 'none',
+                                marginLeft: '5px',
+                                marginBottom: '5px',
+                                height: '50px',
+                            }}  onClick={() => handleDeleteAreaImage('before', index)}>
+                                x ลบภาพ
                             </button>
                         </div>
                     ))}
@@ -328,8 +368,16 @@ const IssueForm = ({
                     .filter(imgInfo => imgInfo.group === 'before')
                     .map((imgInfoPS, idx) => <div key={idx}>
                         <img width='200px' src={imgInfoPS.url} />
-                        <button onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
-                            X
+                        <button style={{
+                                backgroundColor: '#D41010',
+                                color: 'white',
+                                borderRadius: '10px',
+                                borderStyle: 'none',
+                                marginLeft: '5px',
+                                marginBottom: '5px',
+                                height: '50px',
+                            }}  onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
+                            x ลบภาพ
                         </button>
                     </div>)
                     :
@@ -352,8 +400,16 @@ const IssueForm = ({
                     areaImages['after'].map((image, index) => (
                         <div key={index}>
                             <img width='200px' src={URL.createObjectURL(image)} alt="Preview" />
-                            <button onClick={() => handleDeleteAreaImage('after', index)}>
-                                X
+                            <button style={{
+                                backgroundColor: '#D41010',
+                                color: 'white',
+                                borderRadius: '10px',
+                                borderStyle: 'none',
+                                marginLeft: '5px',
+                                marginBottom: '5px',
+                                height: '50px',
+                            }}  onClick={() => handleDeleteAreaImage('after', index)}>
+                                x ลบภาพ
                             </button>
                         </div>
                     ))}
@@ -361,8 +417,16 @@ const IssueForm = ({
                     .filter(imgInfo => imgInfo.group === 'after')
                     .map((imgInfoPS, idx) => <div key={idx}>
                         <img width='200px' src={imgInfoPS.url} />
-                        <button onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
-                            X
+                        <button style={{
+                                backgroundColor: '#D41010',
+                                color: 'white',
+                                borderRadius: '10px',
+                                borderStyle: 'none',
+                                marginLeft: '5px',
+                                marginBottom: '5px',
+                                height: '50px',
+                            }}  onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
+                            x ลบภาพ
                         </button>
                     </div>)
                     :
@@ -378,17 +442,32 @@ const IssueForm = ({
                 fontSize: '30px',
             }}>
                 กำลังบันทึก...
-            </div> : <button onClick={saveIssueForm} style={{
-                width: '347px',
-                height: '80px',
-                marginTop: '20px',
-                backgroundColor: '#F07B3A',
-                fontSize: '28px',
-                fontWeight: 600,
-                color: 'white',
-                borderRadius: '60px',
-                borderStyle: 'none'
-            }}>บันทึก</button>}
+            </div> :
+                (isFormSubmitable ? <button onClick={saveIssueForm} style={{
+                    width: '347px',
+                    height: '80px',
+                    marginTop: '20px',
+                    backgroundColor: '#F07B3A',
+                    fontSize: '28px',
+                    fontWeight: 600,
+                    color: 'white',
+                    borderRadius: '60px',
+                    borderStyle: 'none'
+                }}>บันทึก</button>
+                    :
+                    <button disabled style={{
+                        width: '347px',
+                        height: '80px',
+                        marginTop: '20px',
+                        backgroundColor: '#EAEAEA',
+                        fontSize: '28px',
+                        fontWeight: 600,
+                        color: 'white',
+                        borderRadius: '60px',
+                        borderStyle: 'none'
+                    }}>บันทึก</button>
+                )
+            }
         </div>
     )
 }

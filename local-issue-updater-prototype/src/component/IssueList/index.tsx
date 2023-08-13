@@ -50,9 +50,7 @@ const IssueList = ({ issues }: Props) => {
         setIsCopied(false)
     }, [setIsCopied])
     return (
-        <div style={{
-            paddingTop: '170px',
-        }}>
+        <div>
             {issues && <div>
                 {
                     issues.map((issue, idx) => {
@@ -72,12 +70,13 @@ const IssueList = ({ issues }: Props) => {
                         return (
                             <div key={idx} style={{
                                 height: '103px',
-                                width: '372px',
+                                width: '342px',
                                 overflow: 'visible',
                                 marginTop: '10px',
                                 padding: '8px',
                                 boxShadow: '0px 1px 8px 0px rgba(0, 0, 0, 0.12)',
-                                borderRadius: '12px'
+                                borderRadius: '12px',
+                                backgroundColor: 'white',
                             }}>
                                 <div style={{
                                     display: 'flex',
@@ -94,7 +93,7 @@ const IssueList = ({ issues }: Props) => {
                                     <div style={{
                                         display: 'flex',
                                         justifyContent: 'space-between',
-                                        gap: '40px',
+                                        gap: '20px',
                                     }}>
                                         <div>
                                             <div style={{

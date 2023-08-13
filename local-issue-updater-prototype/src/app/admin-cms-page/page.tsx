@@ -5,7 +5,9 @@ import IssueListContainer from '@/component/IssueListContainer'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { relative } from 'path'
 import React, { useContext, useEffect } from 'react'
+import Image from 'next/image'
 
 const AdminCMSPage = () => {
   const router = useRouter()
@@ -34,16 +36,83 @@ const AdminCMSPage = () => {
       alignItems: 'center',
     }}>
       <div style={{
-        width: '375px',
-        height: '51px',
-        backgroundColor: '#F07B3A',
-        fontWeight: 500,
-        fontSize: '22px'
+        position: 'absolute',
+        top: '76px',
+        right: '122px',
       }}>
-        ปัญหาทั้งหมด
+        <Image
+          src="/mfp-logo.svg"
+          alt="moving forward logo"
+          priority
+          width={150}
+          height={150}
+        />
       </div>
       <div style={{
-        paddingTop: '20px',
+        position: 'absolute',
+        top: '5px',
+        right: '122px',
+      }}>
+        <Image
+          src="/puat-removebg-preview.svg"
+          alt="sor sor puaut moving forward party"
+          priority
+          width={220}
+          height={220}
+        />
+      </div>
+      <div style={{
+        width: '375px',
+        height: '217px',
+        backgroundColor: '#FB6413',
+      }}>
+        <div style={{
+          fontWeight: 500,
+          fontSize: '16px',
+          paddingLeft: '20px',
+          paddingTop: '18px',
+          color: '#072C49',
+          fontFamily: 'Anakotmai',
+          fontStyle: 'normal',
+        }}>
+          สวัสดี
+        </div>
+        <div style={{
+          fontWeight: 700,
+          fontSize: '24px',
+          paddingLeft: '20px',
+          color: '#072C49',
+          fontFamily: 'Anakotmai',
+          fontStyle: 'normal',
+        }}>
+          ทีมคุณปูอัด
+        </div>
+        <div style={{
+          fontWeight: 400,
+          fontSize: '14px',
+          paddingLeft: '20px',
+          paddingTop: '10px',
+          color: 'white',
+          fontFamily: 'Anakotmai',
+          fontStyle: 'normal',
+        }}>
+          {`วันนี้คุณแก้ปัญหาแล้ว ${'xxx'} สู้ต่อไป`}
+        </div>
+        <div style={{
+          fontWeight: 500,
+          fontSize: '16px',
+          paddingLeft: '20px',
+          paddingTop: '40px',
+          color: 'white',
+          fontFamily: 'Anakotmai',
+          fontStyle: 'normal',
+        }}>
+          ปัญหาทั้งหมด
+        </div>
+      </div>
+      <div style={{
+        position: "relative",
+        top: '-45px'
       }}>
         <IssueListContainer />
       </div>
@@ -77,7 +146,7 @@ const AdminCMSPage = () => {
           </button>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

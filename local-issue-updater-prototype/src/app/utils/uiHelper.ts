@@ -66,11 +66,6 @@ export const extractIssueImageData = (imgsInfoParsed: any): OutputImgObject[] | 
 }
 
 export const getIssueStatusColor = (status: string) => {
-    // <option value="รับเรื่องปัญหา">รับเรื่องปัญหา</option>
-    // <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
-    // <option value="ดำเนินการเรียบร้อย">ดำเนินการเรียบร้อย</option>
-    // <option value="นอกเขตพื้นที่">นอกเขตพื้นที่</option>
-    // <option value="ที่ส่วนบุคคล">ที่ส่วนบุคคล</option>
     switch (status) {
         case "รับเรื่องปัญหา":
             return "#CDCDCD"

@@ -114,8 +114,6 @@ const IssueForm = ({
     // update saved image
     useEffect(() => {
         const updatedUrls = displayedImagesThatSavedOnServer.map((img) => img.url)
-        console.log("🚀 ~ file: index.tsx:117 ~ useEffect ~ updatedUrls:", updatedUrls)
-        console.log("🚀 ~ file: index.tsx:119 ~ useEffect ~ updatedImgsOnServer:", updatedImgsOnServer)
         setUpdatedImgsOnServer(
             prev => (
                 prev.filter(imgObj => updatedUrls.includes(imgObj.url))

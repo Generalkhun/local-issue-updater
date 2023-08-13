@@ -51,8 +51,8 @@ const HamburgerMenu = ({ options, issue, onClose }: HamburgerMenuProps) => {
             </button>
             {isOpen && (
                 <div className="menu-options">
-                    {options.map((option: Option) => (
-                        <button className="menu-option" onClick={() => option.callback(issue)}>{option.name}</button>
+                    {options.map((option: Option, idx: number) => (
+                        <button key={idx} className="menu-option" onClick={() => option.callback(issue)}>{option.name}</button>
                     ))}
                 </div>
             )}

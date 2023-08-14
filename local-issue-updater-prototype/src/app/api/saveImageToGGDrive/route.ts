@@ -4,7 +4,8 @@ import { getGoogleDriveAuthConfig } from "@/app/utils/apiHelper";
 import fs from 'fs'
 import path from "path";
 import { NextResponse } from "next/server";
-import { LOCAL_ENV } from "../../../../secrets/localEnvVars";
+/**@localdevelopment */
+//import { LOCAL_ENV } from "../../../../secrets/localEnvVars";
 
 // Function to save a File object to a given directory.
 const saveFileToDirectory = async (file: File, targetDirectory: string): Promise<string> => {

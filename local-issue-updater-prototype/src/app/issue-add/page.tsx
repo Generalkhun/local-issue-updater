@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProvider'
 import useInputImageAreaForm from '@/hooks/useInputImageAreaForm'
 import { isEmpty } from 'lodash'
-import { ImgsInfo, IssueItem } from '@/types'
+import { IssueItem } from '@/types'
 
 const Page = () => {
   const router = useRouter()

@@ -17,7 +17,6 @@ const Page = ({ params }: Props) => {
     const thisIssueData = useMemo(() => issuesData.filter((issue: IssueItem) => issue.id === id)[0], [issuesData])
     const imgsInfoParsed: InputImgObject[] = useMemo(() => thisIssueData?.imgsInfo ? JSON.parse(thisIssueData.imgsInfo) : [], [thisIssueData])
     const imgsInfoDisplay = useMemo(() => imgsInfoParsed ? extractIssueImageData(imgsInfoParsed) : [], [extractIssueImageData, imgsInfoParsed])
-    //const imgsInfoDisplay = thisIssueData ? useMemo(() => extractIssueImageData(thisIssueData.imgsInfo), [extractIssueImageData, thisIssueData.imgsInfo]) : []
     const onClickBack = () => {
         router.push('/admin-cms-page')
     }

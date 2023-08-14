@@ -1,6 +1,8 @@
 "use client"
+import { InputImgObject, extractIssueImageData, severityMapper } from '@/app/utils/uiHelper'
+import StatusDisplayingBadge from '@/component/StatusDisplayingBadge'
 import { IssueItem } from '@/types'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 interface Props {
     params: {
@@ -22,115 +24,104 @@ const Page = ({ params }: Props) => {
                     })
             })
     }, [thisIssueData])
-    return (
-        <>
-            {thisIssueData &&
+    const imgsInfoParsed: InputImgObject[] = useMemo(() => thisIssueData?.imgsInfo ? JSON.parse(thisIssueData.imgsInfo) : [], [thisIssueData])
+    const imgsInfoDisplay = useMemo(() => imgsInfoParsed ? extractIssueImageData(imgsInfoParsed) : [], [extractIssueImageData, imgsInfoParsed])
+    return <div>
+    {thisIssueData && <div style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    }}>
+        <div>
+            <div style={{
+                backgroundColor: "#F07B3A",
+                width: '100%',
+                height: '64px',
+                fontSize: '22px',
+                fontWeight: 500,
+                paddingLeft: '20px',
+                color: 'white',
+            }}>
                 <div style={{
-                    height: '100vh',
-                    width: '100vw',
-                    backgroundColor: 'white',
-                    padding: '30px'
+                    paddingTop: '15px'
                 }}>
-                    <div style={{
-                        fontWeight: 700,
-                        fontSize: '26px',
-                        color: 'black',
-                    }}>
-                        ติดตามความคืบหน้าของปัญหา
-                    </div>
-                    <div style={{
-                        borderTop: '3px solid #bbb',
-                        borderColor: '#989898',
-                    }}></div>
-
-                    <div style={{
-                        width: '150px',
-                        height: '25px',
-                        borderRadius: '9px',
-                        display: 'flex',
-                        color: '#4F4F4F',
-                        position: 'absolute',
-                        top: '100px',
-                        backgroundColor: '#E0E0E0',
-                        alignItems: 'center',
-                        justifyContent: 'space-evenly',
-                        gap: '5px',
-                        paddingLeft: '10px',
-                    }}>
-                        <div style={{
-                            width: '9.01px',
-                            height: '9.01px',
-                            borderRadius: '50%',
-                            backgroundColor: '#F8C96D',
-                        }}>
-                        </div>
-                        <div>
-                            {thisIssueData.status}
-                        </div>
-                    </div>
-                    <div style={{
-                        color: '#7E7E7E',
-                        fontSize: '16px',
-                        lineHeight: '22.4px',
-                        position: 'absolute',
-                        top: '150px',
-                    }}>
-                        {thisIssueData.issueDetail}
-                    </div>
-                    <div
-                        style={{
-                            color: '#4F4F4F',
-                            fontSize: '18px',
-                            fontWeight: 700,
-                            lineHeight: '22.4px',
-                            position: 'absolute',
-                            top: '200px',
-                        }}
-                    >หมายเหตุ</div>
-                    <div
-                        style={{
-                            color: '#7E7E7E',
-                            fontSize: '16px',
-                            lineHeight: '22.4px',
-                            position: 'absolute',
-                            top: '230px',
-                        }}
-                    >
-                        {thisIssueData.ps}
-
-                        <div
-                            style={{
-                                color: '#4F4F4F',
-                                fontSize: '18px',
-                                fontWeight: 700,
-                                lineHeight: '22.4px',
-                                marginTop: '30px',
-                            }}
-                        >วันที่รายงานปัญหา</div>
-                        <div>
-                            {thisIssueData.datetimeReport}
-                        </div>
-
-                        <div
-                            style={{
-                                color: '#4F4F4F',
-                                fontSize: '18px',
-                                fontWeight: 700,
-                                lineHeight: '22.4px',
-                                marginTop: '30px',
-                            }}
-                        >วันที่อัพเดตล่าสุด</div>
-                        <div>
-                            {thisIssueData.latestDatetimeUpdate}
-                        </div>
-                    </div>
-
-
+                    <span>ติดตามความคืบหน้าของปัญหา</span>
                 </div>
-            }
-        </>
+            </div>
+            <div style={{
+                marginTop: '20px',
+                display: 'flex',
+                gap: '10px',
+                flexDirection: 'column'
+            }}>
+                <StatusDisplayingBadge status={thisIssueData.status} />
+            </div>
+            <div style={{
+                paddingTop: '20px',
+            }}>
+                {thisIssueData.issueDetail}
+            </div>
 
-    )
+            <div style={{
+                paddingTop: '20px',
+            }}>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>หมายเหตุ</div>
+                {thisIssueData.ps}
+            </div>
+
+            <div style={{
+                paddingTop: '20px',
+            }}>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>ภาพประกอบหมายเหตุ</div>
+                <div>
+                    {imgsInfoDisplay && imgsInfoDisplay
+                        .filter((imgInfo: any) => imgInfo.group === 'ps')
+                        .map((imgInfoPS: any, idx: number) => <img key={idx} width='200px' src={imgInfoPS.url} />)
+                    }
+                </div>
+            </div>
+
+            <div style={{
+                paddingTop: '20px',
+            }}>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>วันที่รายงานปัญหา</div>
+                {thisIssueData.datetimeReport}
+            </div>
+
+            <div style={{
+                paddingTop: '20px',
+            }}>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>วันที่อัพเดตล่าสุด</div>
+                {thisIssueData.latestDatetimeUpdate}
+            </div>
+
+            <div style={{
+                paddingTop: '20px',
+            }}>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>รูปก่อนแก้ไข</div>
+                <div>
+                    {imgsInfoDisplay && imgsInfoDisplay
+                        .filter((imgInfo: any) => imgInfo.group === 'before')
+                        .map((imgInfoBefore: any, idx: number) => <img key={idx} width='200px' src={imgInfoBefore.url} />)
+                    }
+                </div>
+            </div>
+
+            <div style={{
+                paddingTop: '20px',
+            }}>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>รูปหลังแก้ไข</div>
+                <div>
+                    {imgsInfoDisplay && imgsInfoDisplay
+                        .filter((imgInfo: any) => imgInfo.group === 'after')
+                        .map((imgInfoAfter: any, idx: number) => <img key={idx} width='200px' src={imgInfoAfter.url} />)
+                    }
+                </div>
+            </div>
+        </div>
+    </div >}
+</div>
 }
 
 export default Page

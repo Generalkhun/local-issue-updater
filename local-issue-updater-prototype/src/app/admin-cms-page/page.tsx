@@ -68,7 +68,7 @@ const AdminCMSPage = () => {
         />
       </div>
       {/**@todo make these filteration menu available */}
-      {!isLoading && <>
+      {/* {!isLoading && <>
         <div style={{
           position: 'absolute',
           top: '139px',
@@ -98,7 +98,7 @@ const AdminCMSPage = () => {
             backgroundColor: 'white'
           }}>ตัวกรอง</button>
         </div>
-      </>}
+      </>} */}
       <div style={{
         width: '375px',
         height: '217px',

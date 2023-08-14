@@ -52,9 +52,10 @@ async function uploadFile(file: File) {
                 requestBody: {
                     name: file.name,
                     mimeType: file.type,
-                    //parents:[process.env.GGDRIVE_FOLDER || ""],
+                    /**@production */
+                    parents:[process.env.GGDRIVE_FOLDER || ""],
                     /**@localdevelopment */
-                    parents:[LOCAL_ENV.GGDRIVE_FOLDER || ""],
+                    //parents:[LOCAL_ENV.GGDRIVE_FOLDER || ""],
                 },
             }
         )

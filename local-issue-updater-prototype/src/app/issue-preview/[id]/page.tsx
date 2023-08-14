@@ -53,7 +53,7 @@ const Page = ({ params }: Props) => {
                 marginTop: '20px',
                 display: 'flex',
                 gap: '10px',
-                flexDirection: 'column'
+                flexDirection: 'column',
             }}>
                 <StatusDisplayingBadge status={thisIssueData.status} />
             </div>

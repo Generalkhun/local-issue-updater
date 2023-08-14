@@ -2,7 +2,8 @@ import { promises as fsp } from "fs"
 import { google } from "googleapis";
 import { GoogleAuthOptions } from "google-auth-library";
 import { values, map, slice ,replace,get } from "lodash";
-import { LOCAL_ENV } from "../../../secrets/localEnvVars";
+/**@localdevelopment */
+//import { LOCAL_ENV } from "../../../secrets/localEnvVars";
 const GOOGLE_SHEET_KEYFILE_PATH = '/tmp/googleSheetKeyFile.json'
 const GOOGLE_DRIVE_KEYFILE_PATH = '/tmp/googleDriveKeyFile.json'
 
@@ -31,9 +32,10 @@ const singleObjJsonFileGenerator = async (obj: Object, path: string) => {
 
 const getGoogleSheetAuthConfig = async () => {
     const ggSheetCredential = JSON.parse(
-        //Buffer.from(process.env.GG_SHEET_KEY_BASE64 || '', "base64").toString()
+        /**@production */
+        Buffer.from(process.env.GG_SHEET_KEY_BASE64 || '', "base64").toString()
         /**@localdevelopment */
-        Buffer.from(LOCAL_ENV.GG_SHEET_KEY_BASE64 || '', "base64").toString()
+        //Buffer.from(LOCAL_ENV.GG_SHEET_KEY_BASE64 || '', "base64").toString()
     );
     //generate a json file to store a keyfile
     await singleObjJsonFileGenerator(ggSheetCredential, GOOGLE_SHEET_KEYFILE_PATH);
@@ -47,9 +49,10 @@ const getGoogleSheetAuthConfig = async () => {
 
 export const getGoogleDriveAuthConfig = async () => {
     const ggDriveCredential = JSON.parse(
-        //Buffer.from(process.env.GG_DRIVE_KEY_BASE64 || '', "base64").toString()
+        /**@production */
+        Buffer.from(process.env.GG_DRIVE_KEY_BASE64 || '', "base64").toString()
         /**@localdevelopment */
-        Buffer.from(LOCAL_ENV.GG_DRIVE_KEY_BASE64 || '', "base64").toString()
+        //Buffer.from(LOCAL_ENV.GG_DRIVE_KEY_BASE64 || '', "base64").toString()
     );
     //generate a json file to store a keyfile
     await singleObjJsonFileGenerator(ggDriveCredential, GOOGLE_DRIVE_KEYFILE_PATH);
@@ -87,9 +90,10 @@ export const saveFormToGGSheet = async (formData: any, row?: number) => {
 
     // request 
     const request = {
-        //spreadsheetId: process.env.SHEET_ID,
+        /**@production */
+        spreadsheetId: process.env.SHEET_ID,
         /**@localdevelopment */
-        spreadsheetId: LOCAL_ENV.SHEET_ID,
+        //spreadsheetId: LOCAL_ENV.SHEET_ID,
         range: row ? `test-issues!A${row}:M${row}`:SHEET_RANGE_ADD,
         valueInputOption: 'USER_ENTERED',
         insertDataOption: row ? 'OVERWRITE' : 'INSERT_ROWS',
@@ -107,9 +111,10 @@ export const getIssuesDataFromGGSheet = async () => {
     const sheets = await connectGoogleSheetsApi()
     //query and return response
     const response = await sheets.spreadsheets.values.get({
-        //spreadsheetId: process.env.SHEET_ID,
+        /**@production */
+        spreadsheetId: process.env.SHEET_ID,
         /**@localdevelopment */
-        spreadsheetId: LOCAL_ENV.SHEET_ID,
+        //spreadsheetId: LOCAL_ENV.SHEET_ID,
         range: 'test-issues!A1:L'
     })
     return formatGoogleSheetDataResponse(get(response, 'data.values'))
@@ -140,10 +145,10 @@ export const formatGoogleSheetDataResponse = (sheetDataArray: any) => {
 export const deleteGoogleSheetIssueData = async (rowNumber:number) => {
     const sheets = await connectGoogleSheetsApi()
     const request = {
-        // The ID of the spreadsheet to update.
-        //spreadsheetId: process.env.SHEET_ID,
+        /**@production */
+        spreadsheetId: process.env.SHEET_ID,
         /**@localdevelopment */
-        spreadsheetId: LOCAL_ENV.SHEET_ID,
+        //spreadsheetId: LOCAL_ENV.SHEET_ID,
 
         // The A1 notation of the values to clear.
         range: `A${rowNumber}:L${rowNumber}`,  // TODO: Update placeholder value.

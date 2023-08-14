@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './HamburgerMenu.css'; // You can style the menu in this CSS file
+import './Hamburgermenu.css'; // You can style the menu in this CSS file
 import { IssueItem } from '@/types';
 
 export interface Option {

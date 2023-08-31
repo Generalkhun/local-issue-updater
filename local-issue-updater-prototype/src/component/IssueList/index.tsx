@@ -56,7 +56,6 @@ const IssueList = ({ issues }: Props) => {
                     issues.map((issue, idx) => {
                         let shownImg = ""
                         if (issue?.imgsInfo) {
-                            console.log("🚀 ~ file: index.tsx:59 ~ issues.map ~ issue?.imgsInfo:", issue?.imgsInfo)
                             const imgs = extractIssueImageData(JSON.parse(issue.imgsInfo))
                             if (!imgs.length) {
                                 shownImg = "no image"

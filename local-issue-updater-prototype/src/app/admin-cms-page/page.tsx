@@ -68,21 +68,21 @@ const AdminCMSPage = () => {
         />
       </div>
       {/**@todo make these filteration menu available */}
-      {/* {!isLoading && <>
+      {!isLoading && <>
         <div style={{
           position: 'absolute',
           top: '139px',
           right: '50%',
           marginRight: '-178px'
         }}>
-          <button disabled style={{
+          <button style={{
             width: '112px',
             height: '38px',
             border: '1px solid #FFF',
             borderRadius: '8px',
             backgroundColor: 'white'
           }}
-          >เรียงลำดับ</button>
+          >ตัวกรอง</button>
         </div>
         <div style={{
           position: 'absolute',
@@ -90,15 +90,15 @@ const AdminCMSPage = () => {
           right: '50%',
           marginRight: '-60px'
         }}>
-          <button disabled style={{
+          <button style={{
             width: '112px',
             height: '38px',
             border: '1px solid #FFF',
             borderRadius: '8px',
             backgroundColor: 'white'
-          }}>ตัวกรอง</button>
+          }}>เรียงลำดับ</button>
         </div>
-      </>} */}
+      </>}
       <div style={{
         width: '375px',
         height: '217px',

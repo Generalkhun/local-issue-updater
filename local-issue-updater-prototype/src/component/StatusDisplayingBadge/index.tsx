@@ -9,13 +9,14 @@ const index = ({ status }: Props) => {
     return (
         <div style={{
             maxWidth: '180px',
-            height: '36px',
+            height: '20px',
             borderRadius: '30px',
             textAlign: 'center',
+            padding: '5px 10px 5px 10px',
             backgroundColor: getIssueStatusColor(status),
         }}>
             <div style={{
-                paddingTop: '5px',
+                fontSize: '12px'
             }}>
                 {status}
             </div>

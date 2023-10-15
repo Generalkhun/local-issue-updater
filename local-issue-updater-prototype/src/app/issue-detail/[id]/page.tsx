@@ -5,6 +5,8 @@ import { GoogleSheetDataContext } from '@/contextProvider/googleSheetContextProv
 import { IssueItem } from '@/types'
 import { useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useMemo } from 'react'
+import Image from 'next/image'
+import useClickCopyIssueLink from '@/hooks/useClickCopyIssueLink'
 interface Props {
     params: {
         id: string
@@ -17,6 +19,7 @@ const Page = ({ params }: Props) => {
     const thisIssueData = useMemo(() => issuesData.filter((issue: IssueItem) => issue.id === id)[0], [issuesData])
     const imgsInfoParsed: InputImgObject[] = useMemo(() => thisIssueData?.imgsInfo ? JSON.parse(thisIssueData.imgsInfo) : [], [thisIssueData])
     const imgsInfoDisplay = useMemo(() => imgsInfoParsed ? extractIssueImageData(imgsInfoParsed) : [], [extractIssueImageData, imgsInfoParsed])
+    const { onClickCopyLink, isCopied, clearCopyTick } = useClickCopyIssueLink()
     const onClickBack = () => {
         router.push('/admin-cms-page')
     }
@@ -37,12 +40,13 @@ const Page = ({ params }: Props) => {
         }}>
             <div>
                 <div style={{
-                    backgroundColor: "#F07B3A",
+                    backgroundColor: "#072C49",
                     width: '100%',
-                    height: '64px',
+                    height: '237px',
                     fontSize: '22px',
                     fontWeight: 500,
                     paddingLeft: '20px',
+                    paddingRight: '20px',
                     color: 'white',
                 }}>
                     <div style={{
@@ -51,50 +55,109 @@ const Page = ({ params }: Props) => {
                         <button style={{
                             borderStyle: 'none',
                             backgroundColor: 'transparent',
-                            fontWeight: 400,
-                            fontSize: '12px',
-                            color: 'black',
-                            marginRight: '20px'
-                        }} onClick={onClickBack}>{"< กลับ"}</button>
-                        <span>รายละเอียดปัญหา</span>
-                        <button style={{
-                            backgroundColor: 'transparent',
-                            borderRadius: '18px',
-                            border: '1px solid var(--ffffff, #FFF)',
-                            borderColor: 'white',
-                            fontWeight: 400,
-                            fontSize: '16px',
+                            fontWeight: 500,
+                            fontSize: '14px',
                             color: 'white',
-                            marginLeft: '100px',
-                        }} onClick={onClickEdit}>แก้ไข</button>
+                            marginRight: '20px'
+                        }} onClick={onClickBack}>
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                gap: '3px',
+
+                            }}>
+                                <Image
+                                    src="/ep_back.svg"
+                                    alt="moving forward logo"
+                                    priority
+                                    width={16}
+                                    height={16}
+                                    style={{
+                                        paddingTop: '3px',
+                                    }}
+                                />
+                                <div>
+                                    กลับ
+                                </div>
+                            </div>
+
+                        </button>
+
                     </div>
-                </div>
-                <div style={{
-                    marginTop: '20px',
-                    display: 'flex',
-                    gap: '10px',
-                    flexDirection: 'column'
-                }}>
-                    <StatusDisplayingBadge status={thisIssueData.status} />
+
                     <div style={{
-                        width: '150px',
-                        height: '20px',
-                        backgroundColor: severityMapper(thisIssueData.severity),
-                        color: 'black',
-                        fontFamily: 'Heebo',
-                        fontSize: '12px',
-                        fontWeight: '500px',
-                        borderRadius: '24px',
-                        textAlign: 'center',
+                        marginTop: '20px',
+                        display: 'flex',
+                        gap: '10px',
+                        flexDirection: 'row'
                     }}>
-                        {`ความเร่งด่วน: ${thisIssueData.severity}`}
+                        <div style={{
+                            width: 'auto',
+                            padding: '5px 10px 5px 10px',
+                            height: '20px',
+                            backgroundColor: severityMapper(thisIssueData.severity),
+                            color: 'black',
+                            fontFamily: 'Heebo',
+                            fontSize: '12px',
+                            fontWeight: '500px',
+                            borderRadius: '24px',
+                            textAlign: 'center',
+                        }}>
+                            {thisIssueData.severity}
+                        </div>
+                        <StatusDisplayingBadge status={thisIssueData.status} />
+
+                    </div>
+                    <div style={{
+                        paddingTop: '15px',
+                        fontSize: '18px',
+                        fontWeight: '700',
+                        lineHeight: '27.72px',
+
+                    }}>
+                        {thisIssueData.issueDetail}
+                    </div>
+                    <div style={{
+                        paddingTop: '15px',
+                        fontSize: '12px',
+                        fontWeight: '500',
+                    }}>
+                        {`วันที่รายงานปัญหา ${thisIssueData.datetimeReport}`}
+                    </div>
+                    <div style={{
+                        paddingTop: '15px',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: '10px',
+                        width: '100%',
+                    }}>
+                        <button style={{
+                            width: '100%',
+                            padding: '10px, 12px, 10px, 12px',
+                            borderRadius: '8px',
+                            backgroundColor: '#FB6413',
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            color: 'white',
+                            height: '36px',
+                            borderStyle: 'none'
+                        }} onClick={onClickEdit}>อัพเดตความคืบหน้า</button>
+
+                        <button style={{
+                            width: '100%',
+                            padding: '10px, 12px, 10px, 12px',
+                            borderRadius: '8px',
+                            backgroundColor: 'transparent',
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            color: 'white',
+                            height: '36px',
+                            borderStyle: 'solid',
+                            borderColor: '#FB6413'
+                        }} onClick={() => onClickCopyLink(thisIssueData.id)}>{`${isCopied ? "✅ " : ""}คัดลอกลิงก์`}</button>
                     </div>
                 </div>
-                <div style={{
-                    paddingTop: '20px',
-                }}>
-                    {thisIssueData.issueDetail}
-                </div>
+
 
                 <div style={{
                     paddingTop: '20px',

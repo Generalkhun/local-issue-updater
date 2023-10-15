@@ -4,6 +4,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { extractIssueImageData, getIssueStatusColor, severityMapper } from '@/app/utils/uiHelper';
 import HamburgerMenu, { Option } from '../Hamburgermenu';
+import useClickCopyIssueLink from '@/hooks/useClickCopyIssueLink';
 
 type Props = {
     issues: IssueItem[]
@@ -12,25 +13,15 @@ type Props = {
 const IssueList = ({ issues }: Props) => {
     const router = useRouter()
     const pathName = usePathname()
-    const onClickShare = (id: string) => {
-        const origin =
-            typeof window !== 'undefined' && window.location.origin
-                ? window.location.origin
-                : '';
-
-        const URL = `${origin}${pathName}`;
-        navigator.clipboard.writeText(URL.replace('admin-cms-page', '') + `issue-preview/${id}`)
-    }
+    const { onClickCopyLink, isCopied, clearCopyTick } = useClickCopyIssueLink()
     const onClickDetail = (id: string) => {
         router.push(`/issue-detail/${id}`)
     }
-    const [isCopied, setIsCopied] = useState(false);
     const options: Option[] = useMemo(() => ([
         {
             name: `${isCopied ? "✅ " : ""}คัดลอกลิ้ง`,
             callback: (issue: IssueItem) => {
-                onClickShare(issue.id)
-                setIsCopied(true)
+                onClickCopyLink(issue.id)
             },
         },
         {
@@ -45,10 +36,10 @@ const IssueList = ({ issues }: Props) => {
             name: "พรีวิว",
             callback: (issue: IssueItem) => router.push(`/issue-preview/${issue.id}`),
         }
-    ]), [onClickShare, setIsCopied, isCopied])
+    ]), [onClickCopyLink, isCopied])
     const onCloseHanburgerMenu = useCallback(() => {
-        setIsCopied(false)
-    }, [setIsCopied])
+        clearCopyTick()
+    }, [clearCopyTick])
     return (
         <div>
             {issues && <div>
@@ -87,7 +78,7 @@ const IssueList = ({ issues }: Props) => {
                                         width: '98px',
                                         height: '74px',
                                     }}>
-                                        {shownImg ? <img width='100px' height='auto' src={shownImg} /> : <div style={{ width: '100px'}}></div>}
+                                        {shownImg ? <img width='100px' height='auto' src={shownImg} /> : <div style={{ width: '100px' }}></div>}
                                     </div>
 
                                     <div style={{

@@ -159,88 +159,101 @@ const Page = ({ params }: Props) => {
                 </div>
 
 
-                <div style={{
-                    paddingTop: '20px',
-                }}>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>ประเภทปัญหา</div>
-                    {thisIssueData.type}
-                </div>
 
                 <div style={{
-                    paddingTop: '20px',
+                    paddingLeft: '10px',
                 }}>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>แขวงที่เกิดปัญหา</div>
-                    {thisIssueData.area}
-                </div>
 
-                <div style={{
-                    paddingTop: '20px',
-                }}>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>ชื่อผู้รายงาน</div>
-                    {thisIssueData.reporterName}
-                </div>
-
-                <div style={{
-                    paddingTop: '20px',
-                }}>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>เบอร์โทรศัพท์ผู้รายงาน</div>
-                    {thisIssueData.reporterPhoneNumber}
-                </div>
-
-                <div style={{
-                    paddingTop: '20px',
-                }}>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>หมายเหตุ</div>
-                    {thisIssueData.ps}
-                </div>
-
-                <div style={{
-                    paddingTop: '20px',
-                }}>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>ภาพประกอบหมายเหตุ</div>
-                    <div>
-                        {imgsInfoDisplay && imgsInfoDisplay
-                            .filter((imgInfo: any) => imgInfo.group === 'ps')
-                            .map((imgInfoPS: any, idx: number) => <img key={idx} width='200px' src={imgInfoPS.url} />)
-                        }
+                    <div style={{
+                        paddingTop: '20px',
+                    }}>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>รายละเอียด</div>
+                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.issueDetail}</span>
                     </div>
-                </div>
 
-                <div style={{
-                    paddingTop: '20px',
-                }}>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>วันที่รายงานปัญหา</div>
-                    {thisIssueData.datetimeReport}
-                </div>
-
-                <div style={{
-                    paddingTop: '20px',
-                }}>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>วันที่อัพเดตล่าสุด</div>
-                    {thisIssueData.latestDatetimeUpdate}
-                </div>
-
-                <div style={{
-                    paddingTop: '20px',
-                }}>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>รูปก่อนแก้ไข</div>
-                    <div>
-                        {imgsInfoDisplay && imgsInfoDisplay
-                            .filter((imgInfo: any) => imgInfo.group === 'before')
-                            .map((imgInfoBefore: any, idx: number) => <img key={idx} width='200px' src={imgInfoBefore.url} />)
-                        }
+                    <div style={{
+                        paddingTop: '20px',
+                    }}>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>ประเภทปัญหา</div>
+                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.type}</span>
                     </div>
-                </div>
 
-                <div style={{
-                    paddingTop: '20px',
-                }}>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#4F4F4F' }}>รูปหลังแก้ไข</div>
-                    <div>
-                        {imgsInfoDisplay && imgsInfoDisplay
-                            .filter((imgInfo: any) => imgInfo.group === 'after')
-                            .map((imgInfoAfter: any, idx: number) => <img key={idx} width='200px' src={imgInfoAfter.url} />)
-                        }
+                    <div style={{
+                        paddingTop: '20px',
+                    }}>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>แขวงที่เกิดปัญหา</div>
+                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.area}</span>
+                    </div>
+
+                    <div style={{
+                        paddingTop: '20px',
+                    }}>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>ชื่อผู้รายงาน</div>
+                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.reporterName}</span>
+                    </div>
+
+                    <div style={{
+                        paddingTop: '20px',
+                    }}>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>เบอร์โทรศัพท์ผู้รายงาน</div>
+                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.reporterPhoneNumber}</span>
+                    </div>
+
+                    <div style={{
+                        paddingTop: '20px',
+                    }}>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>หมายเหตุ</div>
+                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.ps}</span>
+                    </div>
+
+                    <div style={{
+                        paddingTop: '20px',
+                    }}>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>ภาพประกอบหมายเหตุ</div>
+                        <div>
+                            {imgsInfoDisplay && imgsInfoDisplay
+                                .filter((imgInfo: any) => imgInfo.group === 'ps')
+                                .map((imgInfoPS: any, idx: number) => <img key={idx} width='200px' src={imgInfoPS.url} />)
+                            }
+                        </div>
+                    </div>
+
+                    <div style={{
+                        paddingTop: '20px',
+                    }}>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>วันที่รายงานปัญหา</div>
+                        {thisIssueData.datetimeReport}
+                    </div>
+
+                    {/* <div style={{
+                        paddingTop: '20px',
+                    }}>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>วันที่อัพเดตล่าสุด</div>
+                        {thisIssueData.latestDatetimeUpdate}
+                    </div> */}
+
+                    <div style={{
+                        paddingTop: '20px',
+                    }}>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>รูปก่อนแก้ไข</div>
+                        <div>
+                            {imgsInfoDisplay && imgsInfoDisplay
+                                .filter((imgInfo: any) => imgInfo.group === 'before')
+                                .map((imgInfoBefore: any, idx: number) => <img key={idx} width='200px' src={imgInfoBefore.url} />)
+                            }
+                        </div>
+                    </div>
+
+                    <div style={{
+                        paddingTop: '20px',
+                    }}>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>รูปหลังแก้ไข</div>
+                        <div>
+                            {imgsInfoDisplay && imgsInfoDisplay
+                                .filter((imgInfo: any) => imgInfo.group === 'after')
+                                .map((imgInfoAfter: any, idx: number) => <img key={idx} width='200px' src={imgInfoAfter.url} />)
+                            }
+                        </div>
                     </div>
                 </div>
             </div>

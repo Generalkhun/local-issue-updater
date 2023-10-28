@@ -1,8 +1,8 @@
 
 import { InputImgObject, OutputImgObject, extractIssueImageData } from '@/app/utils/uiHelper';
 import { IssueItem } from '@/types';
-import { includes } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react'
+import { ConfirmationModal } from '../ConfirmationModal';
 
 interface SaveFormOption {
     updatedImgsOnServer: { url: string; name: string }[] | [],
@@ -13,6 +13,7 @@ type Props = {
     handleDeleteAreaImage: (areaName: string, idx: number) => void;
     onSaveForm: (option?: SaveFormOption) => void
     onFormDataChange: (updatedFormData: Record<any, any>) => void;
+    onLeaveForm: () => void;
     isEditMode?: boolean;
     prefillFormData?: IssueItem;
     isSaving: boolean;
@@ -25,6 +26,7 @@ const IssueForm = ({
     areaImages,
     handleAreaImageChange,
     handleDeleteAreaImage,
+    onLeaveForm,
     isSaving,
 }: Props) => {
     //todo: use id to prefill id the form is editing form
@@ -41,6 +43,7 @@ const IssueForm = ({
     const [displayedImagesThatSavedOnServer, updateDisplayedImagesThatSavedOnServer] = useState(isEditMode ? imgsInfoDisplay : [])
     const [updatedImgsOnServer, setUpdatedImgsOnServer] = useState<{ url: string, name: string }[] | []>(imgsInfoParsed);
     const [isFormSubmitable, setIsFormSubmitable] = useState<boolean>(false)
+    const [isConfirmModalOpen, setConfirmModalOpen] = useState(false);
 
     // prefill everything if it is edit mode
     useEffect(() => {
@@ -141,14 +144,27 @@ const IssueForm = ({
     }
 
     const saveIssueForm = () => {
+        setConfirmModalOpen(true)
+    }
+
+    const handleConfirmSave = () => {
         if (!imgsInfoDisplay.length) {
             onSaveForm();
+            setConfirmModalOpen(false);
             return;
         }
         onSaveForm({
             updatedImgsOnServer,
         });
+        setConfirmModalOpen(false);
+    }
 
+    const handleCancelSave = () => {
+        setConfirmModalOpen(false);
+    }
+
+    const handleClickCancel = () => {
+        onLeaveForm()
     }
 
     return (
@@ -156,6 +172,9 @@ const IssueForm = ({
             padding: '11px',
             color: '#4F4F4F',
             fontSize: '16px',
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
         }}>
             <div style={{
                 display: 'flex',
@@ -172,6 +191,25 @@ const IssueForm = ({
                     <option value="ดำเนินการเรียบร้อย">ดำเนินการเรียบร้อย</option>
                     <option value="นอกเขตพื้นที่">นอกเขตพื้นที่</option>
                     <option value="ที่ส่วนบุคคล">ที่ส่วนบุคคล</option>
+                </select>
+            </div>
+            <div style={{
+                marginTop: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '5px'
+            }}>
+                <label htmlFor='severity'>ความเร่งด่วน*</label>
+                <select value={severity} onChange={(e) => {
+                    setSeverity(e.target.value)
+                }} id='severity' placeholder=''>
+                    <option disabled={true} value="">
+                        -- select --
+                    </option>
+                    <option value="วิกฤติ">วิกฤติ</option>
+                    <option value="ด่วน">ด่วน</option>
+                    <option value="ปานกลาง">ปานกลาง</option>
+                    <option value="รอได้">รอได้</option>
                 </select>
             </div>
             <div style={{
@@ -300,39 +338,20 @@ const IssueForm = ({
                     .map((imgInfoPS, idx) => <div key={idx}>
                         <img width='200px' src={imgInfoPS.url} />
                         <button style={{
-                                backgroundColor: '#D41010',
-                                color: 'white',
-                                borderRadius: '10px',
-                                borderStyle: 'none',
-                                marginLeft: '5px',
-                                marginBottom: '5px',
-                                height: '50px',
-                            }} onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
+                            backgroundColor: '#D41010',
+                            color: 'white',
+                            borderRadius: '10px',
+                            borderStyle: 'none',
+                            marginLeft: '5px',
+                            marginBottom: '5px',
+                            height: '50px',
+                        }} onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
                             x ลบภาพ
                         </button>
                     </div>)
                     :
                     <></>
                 }
-            </div>
-            <div style={{
-                marginTop: '20px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '5px'
-            }}>
-                <label htmlFor='severity'>ความเร่งด่วน*</label>
-                <select value={severity} onChange={(e) => {
-                    setSeverity(e.target.value)
-                }} id='severity' placeholder=''>
-                    <option disabled={true} value="">
-                        -- select --
-                    </option>
-                    <option value="วิกฤติ">วิกฤติ</option>
-                    <option value="ด่วน">ด่วน</option>
-                    <option value="ปานกลาง">ปานกลาง</option>
-                    <option value="รอได้">รอได้</option>
-                </select>
             </div>
             <h2>ภาพประกอบ</h2>
             <div style={{
@@ -359,7 +378,7 @@ const IssueForm = ({
                                 marginLeft: '5px',
                                 marginBottom: '5px',
                                 height: '50px',
-                            }}  onClick={() => handleDeleteAreaImage('before', index)}>
+                            }} onClick={() => handleDeleteAreaImage('before', index)}>
                                 x ลบภาพ
                             </button>
                         </div>
@@ -369,14 +388,14 @@ const IssueForm = ({
                     .map((imgInfoPS, idx) => <div key={idx}>
                         <img width='200px' src={imgInfoPS.url} />
                         <button style={{
-                                backgroundColor: '#D41010',
-                                color: 'white',
-                                borderRadius: '10px',
-                                borderStyle: 'none',
-                                marginLeft: '5px',
-                                marginBottom: '5px',
-                                height: '50px',
-                            }}  onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
+                            backgroundColor: '#D41010',
+                            color: 'white',
+                            borderRadius: '10px',
+                            borderStyle: 'none',
+                            marginLeft: '5px',
+                            marginBottom: '5px',
+                            height: '50px',
+                        }} onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
                             x ลบภาพ
                         </button>
                     </div>)
@@ -408,7 +427,7 @@ const IssueForm = ({
                                 marginLeft: '5px',
                                 marginBottom: '5px',
                                 height: '50px',
-                            }}  onClick={() => handleDeleteAreaImage('after', index)}>
+                            }} onClick={() => handleDeleteAreaImage('after', index)}>
                                 x ลบภาพ
                             </button>
                         </div>
@@ -418,14 +437,14 @@ const IssueForm = ({
                     .map((imgInfoPS, idx) => <div key={idx}>
                         <img width='200px' src={imgInfoPS.url} />
                         <button style={{
-                                backgroundColor: '#D41010',
-                                color: 'white',
-                                borderRadius: '10px',
-                                borderStyle: 'none',
-                                marginLeft: '5px',
-                                marginBottom: '5px',
-                                height: '50px',
-                            }}  onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
+                            backgroundColor: '#D41010',
+                            color: 'white',
+                            borderRadius: '10px',
+                            borderStyle: 'none',
+                            marginLeft: '5px',
+                            marginBottom: '5px',
+                            height: '50px',
+                        }} onClick={() => handleDeleteSavedImage(imgInfoPS.url)}>
                             x ลบภาพ
                         </button>
                     </div>)
@@ -433,42 +452,70 @@ const IssueForm = ({
                     <></>
                 }
             </div>
-            {isSaving ? <div style={{
-                width: '400px',
-                height: '80px',
-                marginTop: '20px',
-                borderRadius: '8px',
-                backgroundColor: 'grey',
-                fontSize: '30px',
+            <div style={{
+                width: '390px',
+                height: '60px',
+                backgroundColor: '#072C49',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '10px',
             }}>
-                กำลังบันทึก...
-            </div> :
-                (isFormSubmitable ? <button onClick={saveIssueForm} style={{
-                    width: '347px',
-                    height: '80px',
-                    marginTop: '20px',
-                    backgroundColor: '#F07B3A',
-                    fontSize: '28px',
-                    fontWeight: 600,
-                    color: 'white',
-                    borderRadius: '60px',
-                    borderStyle: 'none'
-                }}>บันทึก</button>
-                    :
-                    <button disabled style={{
-                        width: '347px',
-                        height: '80px',
-                        marginTop: '20px',
-                        backgroundColor: '#EAEAEA',
-                        fontSize: '28px',
+
+                {isSaving ? <div style={{
+                    width: '212px',
+                    height: '36px',
+                    borderRadius: '8px',
+                    backgroundColor: 'grey',
+                    fontSize: '30px',
+                }}>
+                    กำลังบันทึก...
+                </div> :
+                    (isFormSubmitable ? <button onClick={saveIssueForm} style={{
+                        width: '212px',
+                        height: '36px',
+                        backgroundColor: '#FB6413',
+                        fontSize: '14px',
                         fontWeight: 600,
                         color: 'white',
-                        borderRadius: '60px',
+                        borderRadius: '8px',
                         borderStyle: 'none'
                     }}>บันทึก</button>
-                )
-            }
+                        :
+                        <button disabled style={{
+                            width: '212px',
+                            height: '36px',
+                            backgroundColor: '#FB6413',
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            color: 'white',
+                            borderRadius: '8px',
+                            borderStyle: 'none'
+                        }}>บันทึก</button>
+                    )
+                }
+                <button onClick={handleClickCancel} style={{
+                    width: '122px',
+                    height: '36px',
+                    backgroundColor: 'transparent',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    color: 'white',
+                    borderRadius: '8px',
+                    borderStyle: 'solid',
+                    borderColor: "#FB6413",
+                }}>ยกเลิก</button>
+
+            </div>
+            <ConfirmationModal
+                isOpen={isConfirmModalOpen}
+                onClose={handleCancelSave}
+                onConfirm={handleConfirmSave}
+            />
         </div>
+
     )
 }
 

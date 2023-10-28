@@ -86,10 +86,10 @@ const Page = ({ params }: Props) => {
                     </div>
 
                     <div style={{
-                        marginTop: '20px',
                         display: 'flex',
                         gap: '10px',
-                        flexDirection: 'row'
+                        flexDirection: 'row',
+                        paddingTop: '20px',
                     }}>
                         <div style={{
                             width: 'auto',
@@ -163,53 +163,67 @@ const Page = ({ params }: Props) => {
                 <div style={{
                     paddingLeft: '10px',
                 }}>
+                    <div style={{
+                        position: 'absolute',
+                        top: '380px',
+                        right: '350px',
+                        marginRight: '-188px'
+                    }}>
+                        <Image
+                            src="/mfp-half.svg"
+                            alt="half of moving forward party logo"
+                            priority
+                            width={139}
+                            height={161}
+                        />
+                    </div>
 
                     <div style={{
                         paddingTop: '20px',
                     }}>
                         <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>รายละเอียด</div>
-                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.issueDetail}</span>
+                        <span style={{ color: 'black', fontWeight: 500, fontSize: '15px' }}>{thisIssueData.issueDetail}</span>
                     </div>
 
                     <div style={{
                         paddingTop: '20px',
                     }}>
                         <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>ประเภทปัญหา</div>
-                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.type}</span>
+                        <span style={{ color: 'black', fontWeight: 500, fontSize: '15px' }}>{thisIssueData.type}</span>
                     </div>
 
                     <div style={{
                         paddingTop: '20px',
                     }}>
                         <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>แขวงที่เกิดปัญหา</div>
-                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.area}</span>
+                        <span style={{ color: 'black', fontWeight: 500, fontSize: '15px' }}>{thisIssueData.area}</span>
                     </div>
 
                     <div style={{
                         paddingTop: '20px',
                     }}>
                         <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>ชื่อผู้รายงาน</div>
-                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.reporterName}</span>
+                        <span style={{ color: 'black', fontWeight: 500, fontSize: '15px' }}>{thisIssueData.reporterName}</span>
                     </div>
 
                     <div style={{
                         paddingTop: '20px',
                     }}>
                         <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>เบอร์โทรศัพท์ผู้รายงาน</div>
-                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.reporterPhoneNumber}</span>
+                        <span style={{ color: 'black', fontWeight: 500, fontSize: '15px' }}>{thisIssueData.reporterPhoneNumber}</span>
                     </div>
 
                     <div style={{
                         paddingTop: '20px',
                     }}>
                         <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>หมายเหตุ</div>
-                        <span style={{color: 'black', fontWeight: 500, fontSize: '15px'}}>{thisIssueData.ps}</span>
+                        <span style={{ color: 'black', fontWeight: 500, fontSize: '15px' }}>{thisIssueData.ps}</span>
                     </div>
 
                     <div style={{
                         paddingTop: '20px',
                     }}>
-                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>ภาพประกอบหมายเหตุ</div>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>รูปภาพประกอบหมายเหตุ</div>
                         <div>
                             {imgsInfoDisplay && imgsInfoDisplay
                                 .filter((imgInfo: any) => imgInfo.group === 'ps')
@@ -218,12 +232,12 @@ const Page = ({ params }: Props) => {
                         </div>
                     </div>
 
-                    <div style={{
+                    {/* <div style={{
                         paddingTop: '20px',
                     }}>
                         <div style={{ fontSize: '20px', fontWeight: 700, color: '#072C49' }}>วันที่รายงานปัญหา</div>
                         {thisIssueData.datetimeReport}
-                    </div>
+                    </div> */}
 
                     {/* <div style={{
                         paddingTop: '20px',

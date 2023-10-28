@@ -3,6 +3,7 @@ import { InputImgObject, extractIssueImageData, severityMapper } from '@/app/uti
 import StatusDisplayingBadge from '@/component/StatusDisplayingBadge'
 import { IssueItem } from '@/types'
 import React, { useEffect, useMemo, useState } from 'react'
+import Image from 'next/image'
 
 interface Props {
     params: {
@@ -45,7 +46,6 @@ const Page = ({ params }: Props) => {
                     color: 'white',
                 }}>
                     <div style={{
-                        marginTop: '20px',
                         paddingTop: '20px',
                         display: 'flex',
                         gap: '10px',
@@ -91,6 +91,20 @@ const Page = ({ params }: Props) => {
                 <div style={{
                     paddingLeft: '10px',
                 }}>
+                    <div style={{
+                        position: 'absolute',
+                        top: '300px',
+                        right: '350px',
+                        marginRight: '-188px'
+                    }}>
+                        <Image
+                            src="/mfp-half.svg"
+                            alt="half of moving forward party logo"
+                            priority
+                            width={139}
+                            height={161}
+                        />
+                    </div>
 
                     <div style={{
                         paddingTop: '20px',
